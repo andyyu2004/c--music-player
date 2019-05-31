@@ -1,0 +1,17 @@
+﻿
+<command> ::= <arg> (<flag>? <arg>?)*
+<flag> ::= "-"<arg>
+
+// <argument> ::= <IDENTIFIER> (?)
+
+// <command> can be considered recursive. Sub commands e.g. git -> remote -> add -> arg
+
+// Introduce separate symbols for flags and argument markers?
+
+playtrack @v, ^v, &v, 
+
+
+
+Grammar
+
+cmd ::= name <flag>* (<argflag> <arg>)* <arg>?

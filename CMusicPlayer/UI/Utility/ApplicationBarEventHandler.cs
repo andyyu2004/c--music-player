@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Forms.VisualStyles;
 using CMusicPlayer.UI.ApplicationBar;
 
 namespace CMusicPlayer.UI.Utility
@@ -15,8 +12,8 @@ namespace CMusicPlayer.UI.Utility
         public ApplicationBarEventHandler(Window w, IApplicationBar bar, Action? shutdownAction = null)
         {
             this.w = w;
+            shutdownAction ??= w.Close;
             this.shutdownAction = shutdownAction;
-            if (shutdownAction == null)
             bar.BarMouseDown += OnAppBarMouseDown;
             bar.MaximizeClicked += OnMaximizeClicked;
             bar.CloseClicked += OnCloseClicked;
@@ -24,10 +21,7 @@ namespace CMusicPlayer.UI.Utility
         }
 
         public void OnCloseClicked(object sender, EventArgs e)
-        {
-            if (shutdownAction == null) Application.Current.Shutdown();
-            else shutdownAction();
-        }
+            => shutdownAction();
 
         public void OnMaximizeClicked(object sender, EventArgs e)
         {

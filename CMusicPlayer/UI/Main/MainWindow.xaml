@@ -1,0 +1,195 @@
+﻿<Window x:Class="CMusicPlayer.UI.Main.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CMusicPlayer"
+        xmlns:applicationBar="clr-namespace:CMusicPlayer.UI.ApplicationBar"
+        xmlns:converters="clr-namespace:CMusicPlayer.Util.Converters"
+        mc:Ignorable="d"
+        ResizeMode="CanResizeWithGrip"
+        Title="Music" Height="675" Width="1200"
+        WindowStyle="None"
+        AllowsTransparency="True" x:ClassModifier="internal">
+
+    <Window.Resources>
+        <converters:TimeConverter x:Key="TimeConverter"/>
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="Space"
+                    Command="{Binding PlayPauseCommand}" />
+        <KeyBinding Key="Space"
+                    Command="{Binding PlayPauseCommand}"
+                    Modifiers="Control" />
+        <KeyBinding Key ="D"
+                    Modifiers="Control"
+                    Command="{Binding PlayPauseCommand}" />
+        <KeyBinding Key="F"
+                    Modifiers="Control"
+                    Command="{Binding PlayNextCommand}" />
+        <KeyBinding Key="B"
+                    Modifiers="Control"
+                    Command="{Binding PlayPrevCommand}" />
+        <KeyBinding Key="T"
+                    Modifiers="Control"
+                    Command="{Binding OpenCliCommand}"/>
+        <KeyBinding Key="P"
+                    Modifiers="Control"
+                    Command="{Binding OpenPreferencesCommand}"/>
+        <KeyBinding Key="O"
+                    Modifiers="Control"
+                    Command="{Binding OpenFolderDialogCommand}"/>
+        <KeyBinding Key="S"
+                    Modifiers="Control"
+                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=FocusSearch}"/>
+    </Window.InputBindings>
+
+    <Grid Background="#222222">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="255" />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <!-- -->
+        <applicationBar:ApplicationBar 
+                Grid.Column="0" 
+                Grid.ColumnSpan="5"
+               x:Name="AppBar" 
+               BarTitle="MusicPlayer"/>
+
+
+        <Menu Grid.Row="1" Grid.ColumnSpan="5" Foreground="White" Background="Transparent" Grid.Column="0" Padding="0" Name="Menu">
+            <MenuItem Header="File" Background="#222222" BorderThickness="0">
+                <MenuItem Header="Open File/s" 
+                          Command="{Binding OpenFileDialogCommand}" 
+                          Background="#222222" 
+                          Template="{StaticResource {x:Static MenuItem.SubmenuItemTemplateKey}}"/>
+                <MenuItem Header="Open Folder" 
+                          Command="{Binding OpenFolderDialogCommand}" 
+                          Background="#222222" 
+                          Template="{StaticResource {x:Static MenuItem.SubmenuItemTemplateKey}}"/>
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Preferences" Command="{Binding OpenPreferencesCommand}"/>
+            </MenuItem>
+            <MenuItem Header="Options" />
+            <MenuItem Header="Playback">
+                <MenuItem Header="Shuffle All"/>
+                <MenuItem Header="Above Not Implemented" />
+            </MenuItem>
+            <MenuItem Header="Tools">
+                <MenuItem Header="CLI" Command="{Binding OpenCliCommand}"  ToolTip="Ctrl+T"/>
+            </MenuItem>
+        </Menu>
+
+
+        <TabControl 
+            Grid.Row="2" 
+            Grid.Column="0" 
+            TabStripPlacement="Left" 
+            SelectedIndex="1"
+            Background="Transparent" 
+            BorderThickness="0">
+            <TabItem Header="Libraries" IsEnabled="False" FontWeight="Bold"/>
+            <TabItem Header="Local" Width="180" PreviewMouseDown="HandleLocalTracksClicked"/>
+            <TabItem Header="Cloud" PreviewMouseDown="HandleCloudTracksClicked"/>
+            <TabItem Height="20" IsEnabled="False"/>
+            <TabItem Header="Other" IsEnabled="False" FontWeight="Bold"/>
+            <TabItem Header="Queue" PreviewMouseDown="HandleQueueClicked"/>
+            <TabItem Height ="50" IsEnabled="False" />
+            <TabItem Header="Logout" PreviewMouseDown="HandleLogout"/>
+        </TabControl>
+
+        <Frame
+        Name="MainFrame"
+        NavigationUIVisibility="Hidden"
+        Grid.Row="2"
+        Grid.Column="1"
+        Background="Transparent"
+        Grid.ColumnSpan="4" />
+        <!-- -->
+        <StackPanel
+            x:Name="PlaybackControl"
+            Grid.Row="3"
+            Grid.ColumnSpan="5"
+            Background="#111111"
+            Grid.Column="0">
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Padding="0 5 0 2" Text="{Binding CurrentTrackTitle}" TextAlignment="Center" Foreground="White" />
+                <TextBlock Text="{Binding CurrentTrackAlbumArtist}" TextAlignment="Center" Foreground="White" />
+            </StackPanel>
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Center">
+                <Button Command="{Binding PlayPrevCommand}">
+                    <Image Source="../../Images/prev_icon.png" Height="20" />
+                </Button>
+                <Button Command="{Binding PlayPauseCommand}">
+                    <Image Name="PlayPauseIcon" Source="{Binding PlayPauseImagePath}" Height="20" />
+                </Button>
+                <Button Command="{Binding PlayNextCommand}">
+                    <Image Source="../../Images/next_icon.png" Height="20" />
+                </Button>
+            </StackPanel>
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Center">
+                <TextBlock Text="{Binding Position, Converter={StaticResource TimeConverter}}" Foreground="White" />
+                <Slider
+                    Name="Slider"
+                    Width="400"
+                    Value="{Binding Position}"
+                    PreviewMouseUp="HandleSliderMoved"
+                    PreviewMouseDown="HandleSliderClicked"
+                    Minimum="0"
+                    Maximum="{Binding TotalDuration}"
+                    Foreground="White"
+                    IsMoveToPointEnabled="True"
+                    Style="{DynamicResource SliderStyle}">
+                </Slider>
+                <TextBlock Text="{Binding RemainingDuration, Converter={StaticResource TimeConverter}}" Foreground="White" />
+            </StackPanel>
+        </StackPanel>
+        <StackPanel 
+            Margin="0 40 0 0"
+            Grid.Column="4" 
+            Grid.Row="3" 
+            HorizontalAlignment="Stretch"
+            Background="Transparent" 
+            Orientation="Horizontal">
+            <Image Source="../../Images/volume_icon.png" Width="30"/>
+            <Slider
+                Name="VolumeSlider"
+                Style="{DynamicResource SliderStyle}"
+                IsMoveToPointEnabled="True"
+                ValueChanged="OnVolumeChanged"
+                Width="160"
+                VerticalAlignment="Center"
+                Minimum="0"
+                Value="100"
+                Maximum="100"/>
+            <Label Name="VolumeLabel" 
+                   Content="100%" 
+                   VerticalAlignment="Center" 
+                   Foreground="White"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="5" Grid.Column="0" Background="#111111" Orientation="Horizontal">
+            <Label Content="{Binding CurrentLibrary}" ContentStringFormat="{}Current Library: {0}"/>
+            <Label Content="{Binding NotificationMessage}" 
+                   Foreground="White" 
+                   BorderThickness="0"/>
+        </StackPanel>
+
+
+    </Grid>
+</Window>

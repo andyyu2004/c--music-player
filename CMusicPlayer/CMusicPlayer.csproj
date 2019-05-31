@@ -6,17 +6,98 @@
     <UseWPF>true</UseWPF>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Styles\NoHoverButton.xaml" />
-    <None Remove="Styles\TransparentButton.xaml" />
-    <None Remove="UI\ApplicationBar\ApplicationBar.xaml" />
-    <None Remove="UI\Login\LoginWindow.xaml" />
+    <Compile Remove="Internal\Functional\**" />
+    <EmbeddedResource Remove="Internal\Functional\**" />
+    <None Remove="Internal\Functional\**" />
+    <Page Remove="Internal\Functional\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="CLI\CommandLineTextInterface.xaml" />
+    <None Remove="CLI\CommandLineWindow.xaml" />
+    <None Remove="Images\AppIcon.ico" />
+    <None Remove="Images\close_icon.png" />
+    <None Remove="Images\maximize_icon.png" />
+    <None Remove="Images\minimize_icon.png" />
+    <None Remove="Images\next_icon.png" />
+    <None Remove="Images\pause_icon.png" />
+    <None Remove="Images\play_icon.png" />
+    <None Remove="Images\prev_icon.png" />
+    <None Remove="Images\repeat_icon.png" />
+    <None Remove="Images\repeat_one_icon.png" />
+    <None Remove="Images\shuffle_icon.png" />
+    <None Remove="Images\volume_icon.png" />
+    <None Remove="Images\white_square.png" />
+    <None Remove="Styles\Colours.xaml" />
+    <None Remove="Styles\Grid.xaml" />
+    <None Remove="Styles\Label.xaml" />
+    <None Remove="Styles\Menu.xaml" />
+    <None Remove="Styles\NoHoverButton.xaml" />
+    <None Remove="Styles\TabItem.xaml" />
+    <None Remove="Styles\Templates\GridTemplate.xaml" />
+    <None Remove="Styles\TransparentButton.xaml" />
+    <None Remove="UI\ApplicationBar\ApplicationBar.xaml" />
+    <None Remove="UI\General\SearchControl.xaml" />
+    <None Remove="UI\General\SelectionControl.xaml" />
+    <None Remove="UI\Login\LoginWindow.xaml" />
+    <None Remove="UI\Music\CloudTracks\CloudTracksView.xaml" />
+    <None Remove="UI\Music\LocalTracks\LocalTracksView.xaml" />
+    <None Remove="UI\Music\Queue\QueueView.xaml" />
+    <None Remove="UI\Music\Shared\SwitchingPage.xaml" />
+    <None Remove="UI\Music\Shared\TrackListControl.xaml" />
+    <None Remove="UI\Properties\PropertiesWindow.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\AppIcon.ico" />
+    <Resource Include="Images\close_icon.png" />
+    <Resource Include="Images\maximize_icon.png">
+      <CopyToOutputDirectory>Resource</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\minimize_icon.png" />
+    <Resource Include="Images\next_icon.png" />
+    <Resource Include="Images\pause_icon.png" />
+    <Resource Include="Images\play_icon.png" />
+    <Resource Include="Images\prev_icon.png" />
+    <Resource Include="Images\repeat_icon.png" />
+    <Resource Include="Images\repeat_one_icon.png" />
+    <Resource Include="Images\shuffle_icon.png" />
+    <Resource Include="Images\volume_icon.png" />
+    <Resource Include="Images\white_square.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.60.6" />
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Ninject" Version="3.3.4" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.110" />
+    <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
+    <PackageReference Include="z440.atl.core" Version="2.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CLI\Lines\" />
+    <Folder Include="Internal\Types\Functional\" />
   </ItemGroup>
 
 </Project>
