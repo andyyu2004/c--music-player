@@ -18,7 +18,7 @@ namespace CMusicPlayer.Media.Playback
     {
         private readonly StatisticsManager sm;
 
-        public static int QueueLength { get; } = 50;
+        public static int QueueLength { get; } = 10;
 
         public ObservableCollection<ITrack> Queue { get; } = new ObservableCollection<ITrack>();
 
@@ -151,7 +151,7 @@ namespace CMusicPlayer.Media.Playback
             for (var i = 0; i < repeats; i++)
             {
                 var track = shuffle ? Tracks.RandomElement() : Tracks[trackIndex + i];
-                if (track != null) Queue.Add(shuffle ? Tracks.RandomElement() : Tracks[trackIndex + i]);
+                if (track != null) Queue.Add(track);
             }
         }
 
@@ -164,11 +164,12 @@ namespace CMusicPlayer.Media.Playback
             }
 
             Queue.Clear();
+            QueueIndex = 0;
             for (var i = 0; i < QueueLength; i++)
             {
-                Queue.Add(Tracks.RandomElement());
+                var track = Tracks.RandomElement();
+                if (track != null) Queue.Add(track);
             }
-            QueueIndex = 0;
 
             Play();
         }
@@ -213,9 +214,8 @@ namespace CMusicPlayer.Media.Playback
 
         public void SetTrack(ITrack track)
         {
-            // Don't want it to affect user queue
-            //            PlayTrackNext(track);
             Queue.Insert(QueueIndex + 1, track);
+            // Keep increment separate don't want it to affect user queue
             QueueIndex++;
             LoadCurrentTrack();
             Play();

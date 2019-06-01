@@ -14,9 +14,12 @@
                  <ResourceDictionary Source="Styles/TabItem.xaml"/>
                  <ResourceDictionary Source="Styles/Label.xaml"/>
                  <ResourceDictionary Source="Styles/Colours.xaml"/>
+                 <ResourceDictionary Source="Styles/ScrollBar.xaml"/>
                  <ResourceDictionary Source="Styles/Grid.xaml"/>
                  <ResourceDictionary Source="Styles/Templates/GridTemplate.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
+                 <ResourceDictionary Source="Styles/Templates/SliderTemplate.xaml"/>
+                 <ResourceDictionary Source="Styles/Slider.xaml" />
+             </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
     </Application.Resources>
 </Application>

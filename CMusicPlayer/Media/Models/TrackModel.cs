@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using ATL;
-
-namespace CMusicPlayer.Media.Models
+﻿namespace CMusicPlayer.Media.Models
 {
 
     public class TrackModel : ITrack

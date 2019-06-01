@@ -37,18 +37,23 @@
     <None Remove="Styles\Label.xaml" />
     <None Remove="Styles\Menu.xaml" />
     <None Remove="Styles\NoHoverButton.xaml" />
+    <None Remove="Styles\ScrollBar.xaml" />
+    <None Remove="Styles\Slider.xaml" />
     <None Remove="Styles\TabItem.xaml" />
     <None Remove="Styles\Templates\GridTemplate.xaml" />
+    <None Remove="Styles\Templates\SliderTemplate.xaml" />
     <None Remove="Styles\TransparentButton.xaml" />
     <None Remove="UI\ApplicationBar\ApplicationBar.xaml" />
     <None Remove="UI\General\SearchControl.xaml" />
     <None Remove="UI\General\SelectionControl.xaml" />
     <None Remove="UI\Login\LoginWindow.xaml" />
     <None Remove="UI\Music\CloudTracks\CloudTracksView.xaml" />
-    <None Remove="UI\Music\LocalTracks\LocalTracksView.xaml" />
     <None Remove="UI\Music\Queue\QueueView.xaml" />
+    <None Remove="UI\Music\Shared\AlbumListControl.xaml" />
+    <None Remove="UI\Music\Shared\ArtistListControl.xaml" />
     <None Remove="UI\Music\Shared\SwitchingPage.xaml" />
     <None Remove="UI\Music\Shared\TrackListControl.xaml" />
+    <None Remove="UI\Properties\PreferencesPane.xaml" />
     <None Remove="UI\Properties\PropertiesWindow.xaml" />
   </ItemGroup>
 
@@ -97,7 +102,9 @@
 
   <ItemGroup>
     <Folder Include="CLI\Lines\" />
+    <Folder Include="Internal\Types\DataStructures\" />
     <Folder Include="Internal\Types\Functional\" />
+    <Folder Include="Util\Comparators\" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@
              xmlns:converters="clr-namespace:CMusicPlayer.Util.Converters"
              xmlns:general="clr-namespace:CMusicPlayer.UI.General"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" x:ClassModifier="internal">
 
         <UserControl.Resources>
             <converters:TimeConverter x:Key="TimeConverter" />
@@ -22,7 +22,7 @@
             <!-- <local:PlaybackControl x:Name="PlaybackControl" Grid.Row="0" /> -->
             <DataGrid
             Style="{StaticResource GridStyle}"
-            Name="TracksListView"
+            Name="TracksListGrid"
             MouseDoubleClick="OnTrackDoubleClicked"
             HeadersVisibility="Column"
             AutoGenerateColumns="False" 

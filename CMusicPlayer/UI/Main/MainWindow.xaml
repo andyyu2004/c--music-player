@@ -101,11 +101,11 @@
             Background="Transparent" 
             BorderThickness="0">
             <TabItem Header="Libraries" IsEnabled="False" FontWeight="Bold"/>
-            <TabItem Header="Local" Width="180" PreviewMouseDown="HandleLocalTracksClicked"/>
-            <TabItem Header="Cloud" PreviewMouseDown="HandleCloudTracksClicked"/>
+            <TabItem Header="Local" Width="180" PreviewMouseDown="OnLocalTracksClicked"/>
+            <TabItem Header="Cloud" PreviewMouseDown="OnCloudTracksClicked"/>
             <TabItem Height="20" IsEnabled="False"/>
             <TabItem Header="Other" IsEnabled="False" FontWeight="Bold"/>
-            <TabItem Header="Queue" PreviewMouseDown="HandleQueueClicked"/>
+            <TabItem Header="Queue" PreviewMouseDown="OnQueueClicked"/>
             <TabItem Height ="50" IsEnabled="False" />
             <TabItem Header="Logout" PreviewMouseDown="HandleLogout"/>
         </TabControl>
@@ -143,14 +143,15 @@
             </StackPanel>
             <StackPanel
                 Orientation="Horizontal"
-                HorizontalAlignment="Center">
+                HorizontalAlignment="Center"
+                PreviewMouseDown="OnSliderMouseDown">
                 <TextBlock Text="{Binding Position, Converter={StaticResource TimeConverter}}" Foreground="White" />
                 <Slider
                     Name="Slider"
                     Width="400"
                     Value="{Binding Position}"
-                    PreviewMouseUp="HandleSliderMoved"
-                    PreviewMouseDown="HandleSliderClicked"
+                    PreviewMouseUp="OnSliderMouseUp"
+                    MouseMove="OnSliderMouseMove"
                     Minimum="0"
                     Maximum="{Binding TotalDuration}"
                     Foreground="White"
@@ -179,7 +180,7 @@
                 Value="100"
                 Maximum="100"/>
             <Label Name="VolumeLabel" 
-                   Content="100%" 
+                   Content="100" 
                    VerticalAlignment="Center" 
                    Foreground="White"/>
         </StackPanel>

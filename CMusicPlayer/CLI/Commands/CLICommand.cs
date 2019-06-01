@@ -7,7 +7,7 @@ namespace CMusicPlayer.CLI.Commands
 {
     internal abstract class CliCommand
     {
-        protected readonly CommandLineTextInterface Clti;
+        protected CommandLineTextInterface Clti { get; }
         public abstract string Help { get; }
         public HashSet<Token> Required { get; } = new HashSet<Token>();
 

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using CMusicPlayer.Configuration;
 using CMusicPlayer.UI.Music.CloudTracks;
 using CMusicPlayer.UI.Music.LocalTracks;
@@ -21,6 +22,7 @@ namespace CMusicPlayer.UI.Main
         private readonly QueueView queueView;
         private readonly MainViewModel vm;
         private readonly Action logoutCallback;
+        private bool mouseDownOnSlider;
 
         public MainWindow(LocalTracksView localTracksView, CloudTracksView cloudTracksView, QueueView queueView, MainViewModel vm, Action logoutCallback)
         {
@@ -39,31 +41,46 @@ namespace CMusicPlayer.UI.Main
 
         }
 
-        private void HandleLocalTracksClicked(object sender, RoutedEventArgs e)
+        private void OnLocalTracksClicked(object sender, RoutedEventArgs e)
             => MainFrame.Content = localTracksView;
 
-        private void HandleCloudTracksClicked(object sender, RoutedEventArgs e)
+        private void OnCloudTracksClicked(object sender, RoutedEventArgs e)
             => MainFrame.Content = cloudTracksView;
 
-        private void HandleQueueClicked(object sender, RoutedEventArgs e)
+        private void OnQueueClicked(object sender, RoutedEventArgs e)
             => MainFrame.Content = queueView;
 
-        private void HandleSliderMoved(object sender, MouseButtonEventArgs e)
+        private void OnSliderMouseUp(object sender, MouseButtonEventArgs e)
         {
-            
+            mouseDownOnSlider = false;
+            vm?.OnSliderMouseUp(Slider.Value);
         }
-//            => vm?.HandleSliderMoved(Slider.Value);
 
-        private void HandleSliderClicked(object sender, MouseButtonEventArgs e) { }
-//            => vm?.HandleSliderPressed();
+        // This event is on the stackpanel containing the slider and previewmousedown doesn't work for some reason on slider directly
+        private void OnSliderMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var rect = VisualTreeHelper.GetDescendantBounds(Slider);
+            if (!rect.Contains(e.GetPosition(Slider))) return;
+            mouseDownOnSlider = true;
+            vm.OnSliderMouseDown();
+        }
+
+        private void OnSliderMouseMove(object sender, MouseEventArgs e)
+        {
+            if (!mouseDownOnSlider) return;
+            var width = Slider.ActualWidth;
+            var norm = e.GetPosition(Slider).X / width;
+            Slider.Value = norm * Slider.Maximum;
+        }
+
 
         private void HandleLogout(object sender, RoutedEventArgs e)
         {
-            //            Properties.Settings.Default.UserId = null;
-            //            Properties.Settings.Default.JwtToken = null;
-            //            Properties.Settings.Default.Save();
-            //            logoutCallback();
-            //            Close();
+//            Properties.Settings.Default.UserId = null;
+//            Properties.Settings.Default.JwtToken = null;
+//            Properties.Settings.Default.Save();
+            logoutCallback();
+            Close();
             SettingsManager.CreateNewTable("0");
             SettingsManager.CreateNewTable("1");
             SettingsManager.Settings["0"]["zero"] = "0zero";
@@ -81,11 +98,10 @@ namespace CMusicPlayer.UI.Main
         private void OnVolumeChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var norm = e.NewValue / VolumeSlider.Maximum;
-//            vm?.HandleVolumeChanged(norm);
-//            if (VolumeLabel != null)
+            vm?.HandleVolumeChanged(norm);
             VolumeLabel?.SetValue(ContentProperty, $"{(int)(norm * 100)}");
-            //            VolumeLabel.Content = $"{(int)(norm * 100)}";
         }
+
 
     }
 

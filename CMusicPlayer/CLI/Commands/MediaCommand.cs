@@ -4,7 +4,7 @@ namespace CMusicPlayer.CLI.Commands
 {
     internal abstract class MediaCommand : CliCommand
     {
-        protected readonly IMediaPlayerController Mp;
+        protected IMediaPlayerController Mp { get; }
 
         protected MediaCommand(CommandLineTextInterface clti, IMediaPlayerController mp) : base(clti)
         {

@@ -24,7 +24,7 @@ namespace CMusicPlayer.Data.Files
 
         public event EventHandler FilesUploaded;
 
-        public FileManager(Database db) => this.db = db;
+        public FileManager(IDatabase db) => this.db = db;
 
         public async Task AddLocalFiles(Action<string>? setNotificationMessage = null)
         {
@@ -60,7 +60,7 @@ namespace CMusicPlayer.Data.Files
                         // Taglib api
                         await db.SaveTrack(TrackModel.FromFile(TagLib.File.Create(file)));
                         // ATL api
-//                        await db.SaveTrack(TrackModel.FromFile(file));
+//                        await db.SaveTrack(Track.FromFile(file));
                     }
                     catch (Exception e)
                     {

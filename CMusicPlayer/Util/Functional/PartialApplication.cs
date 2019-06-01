@@ -7,8 +7,6 @@ namespace CMusicPlayer.Util.Functional
         // 1 -> 0 args
         public static Func<TU> Partial<T, TU>(this Func<T, TU> f, T x) => () => f(x);
 
-        // Try partial apply one argument
-        public static Func<TU> Partial<T, TU>(this Func<T, Func<TU>> f, T x) => f(x);
-
+        public static Func<TU, TW> Partial<T, TU, TW>(this Func<T, TU, TW> f, T x) => y => f(x, y);
     }
 }

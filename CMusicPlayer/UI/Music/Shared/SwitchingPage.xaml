@@ -17,14 +17,18 @@
 
         <general:SelectionControl 
             Grid.Row="0" 
-            HorizontalAlignment="Left"/>
+            HorizontalAlignment="Left"
+            ToArtists="OnToArtists"
+            ToAlbums="OnToAlbums"
+            ToGenres="OnToGenres"
+            ToTracks="OnToTracks"/>
 
         <Button Grid.Row="0" 
                 HorizontalAlignment="Right" 
                 Content="Back" 
-                Click="OnBack"
-                Style="{StaticResource TransparentButton}"/>
+                Click="OnBack"/>
 
         <Frame Name="ViewFrame" Grid.Row="1" />
     </Grid>
+
 </Page>
