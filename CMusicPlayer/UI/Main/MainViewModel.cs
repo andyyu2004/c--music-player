@@ -92,7 +92,7 @@ namespace CMusicPlayer.UI.Main
         public ICommand OpenPreferencesCommand { get; }
 
         [SuppressMessage("ReSharper", "SuggestBaseTypeForParameter")]
-        public MainViewModel(IMediaPlayerController controller, FileManager fm, CommandLineWindow cli, PreferencesPane pp)
+        public MainViewModel(IMediaPlayerController controller, FileManager fm, CommandLineWindow cli)
         {
             this.controller = controller;
 
@@ -102,7 +102,7 @@ namespace CMusicPlayer.UI.Main
             StopCommand = new Command(controller.Stop);
 
             OpenCliCommand = new Command(cli.Show);
-            OpenPreferencesCommand = new Command(pp.Show);
+            OpenPreferencesCommand = new Command(() => new PreferencesPane().Show());
 
             OpenFileDialogCommand = new AsyncCommand(() => fm.AddLocalFiles(s => { NotificationMessage = s; }));
             OpenFolderDialogCommand = new AsyncCommand(() => fm.AddLocalFolder(s => { NotificationMessage = s; }));
@@ -145,13 +145,10 @@ namespace CMusicPlayer.UI.Main
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) => 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         public void HandleVolumeChanged(double volume) => controller.Volume = volume;
-
 
     }
 }

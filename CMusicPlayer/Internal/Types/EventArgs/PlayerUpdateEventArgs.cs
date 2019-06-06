@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
 
-namespace MusicPlayer.Internal.Types
+namespace CMusicPlayer.Internal.Types.EventArgs
 {
-    public class PlayerUpdateEventArgs : EventArgs
+    public class PlayerUpdateEventArgs : System.EventArgs
     {
         public double Position { get; }
         public double Duration { get; }

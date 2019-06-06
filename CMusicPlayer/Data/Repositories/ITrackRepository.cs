@@ -5,7 +5,7 @@ using CMusicPlayer.Media.Models;
 
 namespace CMusicPlayer.Data.Repositories
 {
-    internal interface IRepository
+    internal interface ITrackRepository
     {
         Task<IEnumerable<ITrack>> GetTracks();
         Task<IEnumerable<IAlbum>> GetAlbums();

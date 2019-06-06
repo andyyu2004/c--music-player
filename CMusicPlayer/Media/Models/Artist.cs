@@ -6,11 +6,10 @@
         public string? Artist { get; set; }
         public long? Id { get; set; }
 
-        public ArtistModel()
-        {
-            
-        }
-        public ArtistModel(long id)
+        // Required for dapper
+        public ArtistModel(string? artist) => Artist = artist;
+
+        public ArtistModel(long? id)
         {
             Id = id;
         }

@@ -6,12 +6,18 @@
         xmlns:local="clr-namespace:CMusicPlayer.UI.Properties"
         xmlns:applicationBar="clr-namespace:CMusicPlayer.UI.ApplicationBar"
         mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
         Title="PreferencesPane" Height="450" Width="800" x:ClassModifier="internal">
-    <Grid>
+    <Grid Background="#CC111111">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="601*"/>
+            <ColumnDefinition Width="199*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <applicationBar:ApplicationBar Grid.Row="0" BarTitle="Preferences" x:Name="WindowBar"/>
+        <applicationBar:ApplicationBar Grid.Row="0" BarTitle="Preferences" x:Name="WindowBar" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

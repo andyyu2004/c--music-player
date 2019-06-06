@@ -14,7 +14,6 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <DataGrid 
-            Style="{StaticResource GridStyle}"
             Name="AlbumsListGrid"
             HeadersVisibility="Column"
             MouseDoubleClick="OnDoubleClick"
@@ -22,9 +21,22 @@
             ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}"
             HorizontalScrollBarVisibility="Visible"
             ItemsSource="{Binding AlbumList}"
-            AutoGenerateColumns="True"            
+            AutoGenerateColumns="False"            
             Template="{StaticResource DataGridControlTemplate}">
-
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Header="Album"
+                    Binding="{Binding Album}"/>
+                <DataGridTextColumn
+                    Header="Artist"
+                    Binding="{Binding Artist}"/>
+                <DataGridTextColumn
+                    Header="Genre"
+                    Binding="{Binding Genre}" />
+                <DataGridTextColumn
+                    Header="Year"
+                    Binding="{Binding Year, StringFormat=0;;#}"/>
+            </DataGrid.Columns>
         </DataGrid>
         <StackPanel 
             Orientation="Horizontal"

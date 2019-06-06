@@ -5,7 +5,7 @@ using CMusicPlayer.Media.Models;
 
 namespace CMusicPlayer.Data.Repositories
 {
-    internal class LocalRepository : IRepository
+    internal class LocalRepository : ITrackRepository
     {
         private readonly IDatabase db;
 

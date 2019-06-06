@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace CMusicPlayer.Internal.Types.Functional
 {
-    #nullable disable
     /// <summary>
     /// Try&lt;T&gt; is isomorphic to Either&lt;Exception, T&gt; 
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    ///
     public class Try<T> // : Either<Exception, T> 
     {
+        #nullable disable
         private readonly T val;
         private readonly Exception ex;
 

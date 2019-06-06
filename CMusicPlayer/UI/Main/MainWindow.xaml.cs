@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -9,6 +8,7 @@ using CMusicPlayer.UI.Music.CloudTracks;
 using CMusicPlayer.UI.Music.LocalTracks;
 using CMusicPlayer.UI.Music.Queue;
 using CMusicPlayer.UI.Utility;
+using CMusicPlayer.Util;
 
 namespace CMusicPlayer.UI.Main
 {
@@ -35,7 +35,7 @@ namespace CMusicPlayer.UI.Main
 
             DataContext = vm;
 
-            new ApplicationBarEventHandler(this, AppBar);
+            new ApplicationBarEventHandler(this, AppBar, Application.Current.Shutdown);
 
             MainFrame.Content = localTracksView;
 
@@ -76,23 +76,15 @@ namespace CMusicPlayer.UI.Main
 
         private void HandleLogout(object sender, RoutedEventArgs e)
         {
-//            Properties.Settings.Default.UserId = null;
-//            Properties.Settings.Default.JwtToken = null;
-//            Properties.Settings.Default.Save();
-            logoutCallback();
-            Close();
-            SettingsManager.CreateNewTable("0");
-            SettingsManager.CreateNewTable("1");
-            SettingsManager.Settings["0"]["zero"] = "0zero";
-            SettingsManager.Settings["0"]["one"] = "0one";
-            SettingsManager.Settings["1"]["one"] = "1one";
+            Config.Default(Constants.Authentication);
+            Config.Save();
+            Process.Start(@"./Scripts/start.bat");
+            Application.Current.Shutdown(0);
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+        private void OnFocusSearch()
         {
-            base.OnClosing(e);
-//            vm?.StopCommand?.Execute(null);
-            Application.Current.Shutdown(0);
+//            if (MainFrame.Content is TracksView t) t.FocusSearchText();
         }
 
         private void OnVolumeChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

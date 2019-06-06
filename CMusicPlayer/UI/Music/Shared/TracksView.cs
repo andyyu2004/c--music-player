@@ -21,8 +21,11 @@ namespace CMusicPlayer.UI.Music.Shared
             this.trackListControl = trackListControl;
             this.albumListControl = albumListControl;
             this.artistListControl = artistListControl;
+
             albumListControl.ToTracksByAlbum += OnToTracksByAlbum;
             artistListControl.ToAlbumsByArtist += OnToAlbumsByArtist;
+            trackListControl.ToAlbum += OnToTracksByAlbum;
+            trackListControl.ToArtist += OnToAlbumsByArtist;
         }
 
         /**

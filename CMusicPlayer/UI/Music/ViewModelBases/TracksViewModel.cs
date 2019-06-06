@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using CMusicPlayer.Data.Repositories;
 using CMusicPlayer.Media.Models;
 using CMusicPlayer.Media.Playback;
-using CMusicPlayer.Util.Extensions;
-using JetBrains.Annotations;
 
 namespace CMusicPlayer.UI.Music.ViewModelBases
 {
@@ -18,21 +13,18 @@ namespace CMusicPlayer.UI.Music.ViewModelBases
      */
     internal abstract class TracksViewModel : MusicViewModel
     {
-        protected IRepository Repository { get; }
-        public string LibraryName { get; } = "";
+        protected ITrackRepository Repository { get; }
+        public abstract string LibraryName { get; }
 
-        protected TracksViewModel(IMediaPlayerController mediaController, IRepository repository) : base(mediaController)
-        {
-            Repository = repository;
-        }
+        protected TracksViewModel(IMediaPlayerController mediaController, ITrackRepository repository) : base(mediaController) => Repository = repository;
 
-        public void PlayTrackNext(ITrack track) => PlayerController.PlayTrackNext(track);
-        public void AddTrackToQueue(ITrack track) => PlayerController.AddTrackToQueue(track);
+        public void PlayTrackNext(ITrack track) => Mp.PlayTrackNext(track);
+        public void AddTrackToQueue(ITrack track) => Mp.AddTrackToQueue(track);
 
         public async void ShuffleAll(object sender, EventArgs e)
         {
-            PlayerController.SetTrackList(this, (await GetTracks()).ToList());
-            PlayerController.ShuffleAll();
+            Mp.SetTrackList(this, (await GetTracks()).ToList());
+            Mp.ShuffleAll();
         }
 
         public async Task<IEnumerable<ITrack>> GetTracks() => await Repository.GetTracks();

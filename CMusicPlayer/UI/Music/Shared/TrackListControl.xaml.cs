@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,7 +11,6 @@ using CMusicPlayer.Media.Models;
 using CMusicPlayer.UI.General;
 using CMusicPlayer.UI.Music.ViewModelBases;
 using CMusicPlayer.Util.Extensions;
-using CMusicPlayer.Util.Functional;
 
 namespace CMusicPlayer.UI.Music.Shared
 {
@@ -46,7 +44,7 @@ namespace CMusicPlayer.UI.Music.Shared
             this.vm = vm;
             getTracks = vm.GetTracks;
             RefreshTracks();
-//            PlaybackControl.ShuffleAll += vm.ShuffleAll;
+            PlaybackControl.ShuffleAll += vm.ShuffleAll;
         }
 
         private async void RefreshTracks() => SetTrackList(await GetTracks());
@@ -59,8 +57,48 @@ namespace CMusicPlayer.UI.Music.Shared
                 vm.SetTrack(track);
         }
 
+        private void OnPlayNextClicked(object sender, RoutedEventArgs e)
+        {
+            if (TracksListGrid.SelectedItem is ITrack track)
+                vm.PlayTrackNext(track);
+        }
+
+        private void OnAddToQueueClicked(object sender, RoutedEventArgs e)
+        {
+            if (TracksListGrid.SelectedItem is ITrack track)
+                vm.AddTrackToQueue(track);
+        }
+
+        private void OnViewPropertiesClicked(object sender, RoutedEventArgs e)
+        {
+            if (TracksListGrid.SelectedItem is ITrack track)
+                vm.ViewProperties(track);
+        }
+
+        private void OnToAlbum(object sender, RoutedEventArgs e)
+        {
+            if (!(TracksListGrid.SelectedItem is ITrack t)) return;
+            ToAlbum?.Invoke(this, new AlbumEventArgs(new AlbumModel(t.AlbumId)
+            {
+                Album = t.Album,
+                Artist = t.Artist,
+                Year = t.Year,
+            }));
+        }
+
+        private void OnToArtist(object sender, RoutedEventArgs e)
+        {
+            if (!(TracksListGrid.SelectedItem is ITrack t)) return;
+            ToArtist?.Invoke(this, new ArtistEventArgs(new ArtistModel(t.ArtistId)
+            {
+                Artist = t.Artist,
+            }));
+        }
+
         private void SearchTextChanged(object sender, TextChangedEventArgs e) => TracksListGrid.ItemsSource = TrackList.Where(track => track.Search(SearchControl.SearchBox.Text));
 
         public bool FocusSearchElement() => SearchControl.FocusInput();
+
+
     }
 }

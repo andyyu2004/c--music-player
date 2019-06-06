@@ -9,7 +9,7 @@
         ResizeMode="NoResize"
         AllowsTransparency="True"
         Background="#222222"
-        Title="Login" Height="450" Width="800">
+        Title="Login" Height="450" Width="800" x:ClassModifier="internal">
     <Window.InputBindings>
         <KeyBinding Key="Enter" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=SubmitCommand }"/>
     </Window.InputBindings>
@@ -21,7 +21,7 @@
         <applicationBar:ApplicationBar x:Name="Bar" BarTitle="Login"/>
         <StackPanel Margin="20 0 20 0" Grid.Row="1">
             <Label Foreground="White" HorizontalAlignment="Center" FontSize="25" Content="Login" />
-            <Label Name="MessageLabel" Foreground="White" FontSize="12" Content="{Binding Path=Message, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"/>
+            <Label Name="MessageLabel" Foreground="Red" FontSize="12" Content="{Binding Path=Message, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"/>
             <Separator />
             <Label Foreground="White" Content="Email" />
             <TextBox Name="EmailTextInput" Text="{Binding Path=Email}"/>
@@ -29,9 +29,10 @@
             <PasswordBox Name="PasswordTextInput" />
             <Label Foreground="White" Content="API Endpoint"/>
             <!-- <Label Content="http://" Foreground="White"/> -->
-            <TextBox Name="ApiEndpointTextInput" Text="{Binding ApiEndpoint, Mode=TwoWay}"/>
-            <Button Click="OnSubmitLoginRequest" Margin="60 10" Foreground="White" Background="#454545" Content="Submit" />
-            <Button Foreground="White" Width="80" Background="Transparent" Content="Use Offline" BorderThickness="0" Click="UseOffline" />
+            <TextBox Name="ApiEndpointTextInput" 
+                     Text="{Binding ApiEndpoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=SubmitCommand }" Margin="60 10"  Content="Submit" />
+            <Button Width="80" Content="Use Offline" Click="UseOffline" />
         </StackPanel>
     </Grid>
 

@@ -1,5 +1,8 @@
 ﻿namespace CMusicPlayer.Media.Models
 {
+    /**
+     * These interfaces probably are not necessary anymore, can remove and replace with the model implementations only
+     */
     public interface ITrack
     {
         string? Artist { get; set; }

@@ -23,6 +23,7 @@ namespace CMusicPlayer
         {
             StartApp();
             SystemEvents.PowerModeChanged += SystemEventsOnPowerModeChanged;
+            Exit += OnExit;
         }
 
         private void SystemEventsOnPowerModeChanged(object sender, PowerModeChangedEventArgs e)
@@ -37,7 +38,6 @@ namespace CMusicPlayer
 
         private void StartApp()
         {
-            var loginWindow = new LoginWindow(kernel.Get<LoginViewModel>());
             MainWindow = new MainWindow(
                 kernel.Get<LocalTracksView>(),
                 kernel.Get<CloudTracksView>(),
@@ -45,13 +45,13 @@ namespace CMusicPlayer
                 kernel.Get<MainViewModel>(),
                 StartApp
             );
-            MainWindow.Show();
-            loginWindow.Close();
+            kernel.Get<LoginWindow>();
         }
 
-        private void OnExit(object sender, ExitEventArgs e)
+        private static void OnExit(object sender, ExitEventArgs e)
         {
-            SettingsManager.Save();
+            Config.Save();
+            Current.Shutdown(0);
         }
 
 

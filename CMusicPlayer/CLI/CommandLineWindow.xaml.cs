@@ -28,10 +28,7 @@ namespace CMusicPlayer.CLI
             Clti.ReadLine += OnReadLine;
         }
 
-        private void OnReadLine(object sender, StringEventArgs e)
-        {
-            ExecuteCommand(e.Str);
-        }
+        private void OnReadLine(object sender, StringEventArgs e) => ExecuteCommand(e.Str);
 
         private void ExecuteCommand(string command)
         {

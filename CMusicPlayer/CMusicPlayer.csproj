@@ -19,6 +19,7 @@
   <ItemGroup>
     <None Remove="CLI\CommandLineTextInterface.xaml" />
     <None Remove="CLI\CommandLineWindow.xaml" />
+    <None Remove="Configuration\default_settings.json" />
     <None Remove="Images\AppIcon.ico" />
     <None Remove="Images\close_icon.png" />
     <None Remove="Images\maximize_icon.png" />
@@ -33,6 +34,7 @@
     <None Remove="Images\volume_icon.png" />
     <None Remove="Images\white_square.png" />
     <None Remove="Styles\Colours.xaml" />
+    <None Remove="Styles\ContextMenu.xaml" />
     <None Remove="Styles\Grid.xaml" />
     <None Remove="Styles\Label.xaml" />
     <None Remove="Styles\Menu.xaml" />
@@ -40,6 +42,7 @@
     <None Remove="Styles\ScrollBar.xaml" />
     <None Remove="Styles\Slider.xaml" />
     <None Remove="Styles\TabItem.xaml" />
+    <None Remove="Styles\Templates\ContextMenuTemplate.xaml" />
     <None Remove="Styles\Templates\GridTemplate.xaml" />
     <None Remove="Styles\Templates\SliderTemplate.xaml" />
     <None Remove="Styles\TransparentButton.xaml" />
@@ -47,10 +50,10 @@
     <None Remove="UI\General\SearchControl.xaml" />
     <None Remove="UI\General\SelectionControl.xaml" />
     <None Remove="UI\Login\LoginWindow.xaml" />
-    <None Remove="UI\Music\CloudTracks\CloudTracksView.xaml" />
     <None Remove="UI\Music\Queue\QueueView.xaml" />
     <None Remove="UI\Music\Shared\AlbumListControl.xaml" />
     <None Remove="UI\Music\Shared\ArtistListControl.xaml" />
+    <None Remove="UI\Music\Shared\PlaybackControl.xaml" />
     <None Remove="UI\Music\Shared\SwitchingPage.xaml" />
     <None Remove="UI\Music\Shared\TrackListControl.xaml" />
     <None Remove="UI\Properties\PreferencesPane.xaml" />
@@ -58,6 +61,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Configuration\default_settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Images\AppIcon.ico" />
     <Resource Include="Images\close_icon.png" />
     <Resource Include="Images\maximize_icon.png">
@@ -76,10 +82,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ByteTerrace.Maths.Cryptography.Pbkdf2" Version="0.0.4" />
     <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Ninject" Version="3.3.4" />
+    <PackageReference Include="SimpleCrypto.NetCore" Version="1.0.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.110" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
     <PackageReference Include="z440.atl.core" Version="2.10.0" />
@@ -102,9 +110,14 @@
 
   <ItemGroup>
     <Folder Include="CLI\Lines\" />
-    <Folder Include="Internal\Types\DataStructures\" />
     <Folder Include="Internal\Types\Functional\" />
     <Folder Include="Util\Comparators\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Scripts\start.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 using CMusicPlayer.Internal.Types.EventArgs;
 using CMusicPlayer.Media.Models;
 using CMusicPlayer.Statistics;
@@ -105,7 +106,7 @@ namespace CMusicPlayer.Media.Playback
         {
             try
             {
-                mp.Dispatcher.Invoke(() => PositionUpdated?.Invoke(this, new PlayerUpdateEventArgs(mp.Position, mp.NaturalDuration)));
+                mp.Dispatcher.InvokeAsync(() => PositionUpdated?.Invoke(this, new PlayerUpdateEventArgs(mp.Position, mp.NaturalDuration)));
             }
             catch (TaskCanceledException exception)
             {
@@ -164,12 +165,12 @@ namespace CMusicPlayer.Media.Playback
             }
 
             Queue.Clear();
-            QueueIndex = 0;
             for (var i = 0; i < QueueLength; i++)
             {
                 var track = Tracks.RandomElement();
                 if (track != null) Queue.Add(track);
             }
+            QueueIndex = 0;
 
             Play();
         }

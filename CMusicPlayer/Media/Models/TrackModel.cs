@@ -1,4 +1,7 @@
-﻿namespace CMusicPlayer.Media.Models
+﻿using System.Diagnostics;
+using ATL;
+
+namespace CMusicPlayer.Media.Models
 {
 
     public class TrackModel : ITrack
@@ -29,8 +32,10 @@
         /// <returns></returns>
         public static TrackModel FromFile(TagLib.File file)
         {
+            // Using both libraries to get tags as some fields only work for one of the libraries
             var t = file.Tag;
             var p = file.Properties;
+//            var track = new Track(file.Name);
             return new TrackModel
             {
                 Artist = t.FirstPerformer,

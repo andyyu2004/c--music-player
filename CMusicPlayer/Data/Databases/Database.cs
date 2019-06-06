@@ -45,9 +45,9 @@ namespace CMusicPlayer.Data.Databases
             try
             {
                 await db.ExecuteAsync(@"REPLACE Into Tracks
-                    (trackid, artist, album, title, encoding, filename, path, duration, bitrate, lyrics, genre, year)
+                    (trackid, artist, album, title, encoding, filename, path, duration, bitrate, samplerate, lyrics, genre, year)
                     values 
-                    (@TrackId, @Artist, @Album, @Title, @Encoding, @Filename, @Path, @Duration, @Bitrate, @Lyrics, @Genre, @Year)", track);
+                    (@TrackId, @Artist, @Album, @Title, @Encoding, @Filename, @Path, @Duration, @Bitrate, @SampleRate, @Lyrics, @Genre, @Year)", track);
             }
             catch (Exception e)
             {

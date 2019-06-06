@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -28,7 +26,7 @@ namespace CMusicPlayer.Data.Files
 
         public async Task AddLocalFiles(Action<string>? setNotificationMessage = null)
         {
-            var files = OpenFileDialog().ToArray();
+            var files = OpenFileDialog();
             await AddFilesToDatabase(files, setNotificationMessage);
             setNotificationMessage?.Invoke(string.Empty);
             FilesUploaded?.Invoke(this, EventArgs.Empty);
@@ -41,13 +39,13 @@ namespace CMusicPlayer.Data.Files
             if (result != DialogResult.OK) return;
             var dirInfo = new DirectoryInfo(dialog.SelectedPath);
             var files = dirInfo.GetFiles("*.*", SearchOption.AllDirectories)
-                .Select(file => file.FullName).ToArray();
+                .Select(file => file.FullName);
             await AddFilesToDatabase(files, setNotificationMessage);
             setNotificationMessage?.Invoke(string.Empty);
             FilesUploaded?.Invoke(this, EventArgs.Empty);
         }
 
-        public async Task AddFilesToDatabase(string[] filepaths, Action<string>? cb = null)
+        public async Task AddFilesToDatabase(IEnumerable<string> filepaths, Action<string>? cb = null)
         {
             await Task.Run(async () => // Perform On Another Thread To Prevent Freezing UI
             {

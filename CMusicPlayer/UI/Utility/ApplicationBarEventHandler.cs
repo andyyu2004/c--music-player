@@ -21,7 +21,7 @@ namespace CMusicPlayer.UI.Utility
         }
 
         public void OnCloseClicked(object sender, EventArgs e)
-            => shutdownAction();
+            => shutdownAction.Invoke();
 
         public void OnMaximizeClicked(object sender, EventArgs e)
         {

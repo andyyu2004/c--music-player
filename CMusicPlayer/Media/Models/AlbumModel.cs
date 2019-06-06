@@ -1,6 +1,6 @@
 ﻿namespace CMusicPlayer.Media.Models
 {
-    public class AlbumModel : IAlbum
+    internal class AlbumModel : IAlbum
     {
         // Not really in use for local tracks currently
         public long? Id { get; }
@@ -10,12 +10,13 @@
         public string? Genre { get; set; }
         public uint? Year { get; set; }
 
+        // Required for dapper
         public AlbumModel()
         {
             
         }
 
-        public AlbumModel(long id)
+        public AlbumModel(long? id)
         {
             Id = id;
         }

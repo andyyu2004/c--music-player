@@ -1,6 +1,14 @@
-﻿using System.Windows;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using CMusicPlayer.Configuration;
+using CMusicPlayer.Internal.Types.Commands;
+using CMusicPlayer.Internal.Types.DataStructures;
 using CMusicPlayer.UI.Utility;
+using CMusicPlayer.Util.Extensions;
+using CMusicPlayer.Util.Functional;
+using static CMusicPlayer.Util.Constants;
 
 //using MusicPlayer.Internal.Types;
 //using MusicPlayer.Util;
@@ -10,53 +18,55 @@ namespace CMusicPlayer.UI.Login
     /// <summary>
     /// Interaction logic for LoginWindow.xaml
     /// </summary>
-    public partial class LoginWindow // Inherits from Window
+    internal partial class LoginWindow
     {
 
-//        private readonly LoginViewModel vm;
+        private readonly LoginViewModel vm;
 
-        // Considered Logged In If There Is JwtToken
-//        public bool IsLoggedIn => !string.IsNullOrEmpty(Properties.Settings.Default.JwtToken)
-//                                  && !string.IsNullOrEmpty(Properties.Settings.Default.ApiEndpoint)
-//                                  && !string.IsNullOrEmpty(Properties.Settings.Default.UserId);
+        // Considered logged in if there exists token, api, and userid
+        public bool IsLoggedIn => (!auth[JwtToken]?.IsEmpty() ?? false)
+                                  && (!auth[ApiEndpoint]?.IsEmpty() ?? false)
+                                  && (!auth[UserId]?.IsEmpty() ?? false);
 
-//        public ICommand SubmitCommand { get; }
+        private readonly NDictionary<string, string> auth = Config.Settings[Authentication];
+
+        public ICommand SubmitCommand { get; }
 
         public LoginWindow(LoginViewModel loginViewModel)
         {
             InitializeComponent();
+            vm = loginViewModel;
+            DataContext = vm;
+
+            new ApplicationBarEventHandler(this, Bar, new Action<int>(Application.Current.Shutdown).Partial(0));
+
+            Config.CreateNewTable(Authentication);
             
-//            vm = loginViewModel;
-//            DataContext = vm;
+            SubmitCommand = new AsyncCommand(SubmitLoginRequest);
 
-            new ApplicationBarEventHandler(this, Bar);
-
-            // For Key Bindings
-//            SubmitCommand = new Command(() => OnSubmitLoginRequest(this, null));
+            if (!IsLoggedIn) Show();
+            else ToMainWindow();
         }
 
-        private void OnSubmitLoginRequest(object sender, RoutedEventArgs e)
+        private async Task SubmitLoginRequest()
         {
             // As Extension Method Will Blow Up On Null 
-//            if (string.IsNullOrWhiteSpace(EmailTextInput.Text) || string.IsNullOrWhiteSpace(PasswordTextInput.Password))
-//            {
-//                MessageLabel.Content = "Please Enter Email And Password";
-//                return;
-//            }
-//            if (!await viewModel.OnLoginClicked(PasswordTextInput.Password)) return;
-//            ToMainWindow();
+            if (EmailTextInput.Text.IsEmpty() || PasswordTextInput.Password.IsEmpty())
+            {
+                MessageLabel.Content = "Please Enter Email And Password";
+                return;
+            }
+            if (!await vm.OnLoginClicked(PasswordTextInput.Password)) return;
+            ToMainWindow();
         }
 
         private void ToMainWindow()
         {
-            Close();
             Application.Current.MainWindow?.Show();
+            Close();
         }
 
-        private void UseOffline(object sender, RoutedEventArgs e)
-        {
-            ToMainWindow();
-        }
+        private void UseOffline(object sender, RoutedEventArgs e) => ToMainWindow();
     }
 
 

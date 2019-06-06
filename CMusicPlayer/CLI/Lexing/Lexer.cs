@@ -100,7 +100,7 @@ namespace CMusicPlayer.CLI.Lexing
         {
 //            var substring = xs.Substring(start, xs.Length - end);
 //            var substring = xs[start..(end + 1)].Trim();
-            var substring = xs.ToCharArray()[start..end + 1].ToString();
+            var substring = new string(xs.ToCharArray()[start..end + 1]).Trim();
             tokens.Add(new Token(substring, type));
         }
 

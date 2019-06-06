@@ -14,7 +14,6 @@
         </Grid.RowDefinitions>
         <DataGrid 
             Grid.Row="0"
-            Style="{StaticResource GridStyle}"
             MouseDoubleClick="OnDoubleClick"
             Name="ArtistsGrid"
             HeadersVisibility="Column"
