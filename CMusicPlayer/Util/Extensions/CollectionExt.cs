@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CMusicPlayer.Internal.Interfaces;
 
 namespace CMusicPlayer.Util.Extensions
 {
@@ -9,5 +10,14 @@ namespace CMusicPlayer.Util.Extensions
             xs.Clear();
             ys.ForEach(xs.Add);
         }
+
+        internal static void AddCopy<T>(this ICollection<T> xs, T x) where T : IShallowCopyable =>
+            xs.Add((T)x.ShallowCopy());
+//        {
+//            if (xs.Contains(x)) xs.Add((T) x.ShallowCopy());
+//            else xs.Add(x);
+//        }
+
+
     }
 }

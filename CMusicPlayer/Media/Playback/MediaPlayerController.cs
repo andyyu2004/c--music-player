@@ -15,7 +15,7 @@ using MusicPlayer.Internal.Types;
 
 namespace CMusicPlayer.Media.Playback
 {
-    internal class MediaPlayerContainer : IMediaPlayerController
+    internal class MediaPlayerController : IMediaPlayerController
     {
         private readonly StatisticsManager sm;
 
@@ -51,6 +51,9 @@ namespace CMusicPlayer.Media.Playback
         private bool tempIsPlaying;
         private bool shuffle = true;
 
+        // Where the generated queue should begin (default 0)
+        private int userQueueIndex;
+
         private int queueIndex = -1;
         public int QueueIndex
         {
@@ -84,7 +87,7 @@ namespace CMusicPlayer.Media.Playback
             }
         }
 
-        public MediaPlayerContainer(StatisticsManager sm)
+        public MediaPlayerController(StatisticsManager sm)
         {
             this.sm = sm;
             timer.Elapsed += OnTimeElapsed;
@@ -106,7 +109,7 @@ namespace CMusicPlayer.Media.Playback
         {
             try
             {
-                mp.Dispatcher.InvokeAsync(() => PositionUpdated?.Invoke(this, new PlayerUpdateEventArgs(mp.Position, mp.NaturalDuration)));
+                mp.Dispatcher.Invoke(() => PositionUpdated?.Invoke(this, new PlayerUpdateEventArgs(mp.Position, mp.NaturalDuration)));
             }
             catch (TaskCanceledException exception)
             {
@@ -114,8 +117,7 @@ namespace CMusicPlayer.Media.Playback
             }
         }
 
-        // Where the generated queue should begin (default 0)
-        private int userQueueIndex;
+  
 
         // Events
         public event EventHandler<TrackEventArgs> CurrentTrackChanged;
@@ -152,8 +154,14 @@ namespace CMusicPlayer.Media.Playback
             for (var i = 0; i < repeats; i++)
             {
                 var track = shuffle ? Tracks.RandomElement() : Tracks[trackIndex + i];
-                if (track != null) Queue.Add(track);
+                if (track != null) Queue.AddCopy(track);
             }
+        }
+
+        private void ClearQueue()
+        {
+            Queue.Clear();
+            userQueueIndex = 0;
         }
 
         public void ShuffleAll()
@@ -163,12 +171,12 @@ namespace CMusicPlayer.Media.Playback
                 MessageBox.Show("Empty Track List");
                 return;
             }
-
-            Queue.Clear();
+            ClearQueue();
+            
             for (var i = 0; i < QueueLength; i++)
             {
                 var track = Tracks.RandomElement();
-                if (track != null) Queue.Add(track);
+                if (track != null) Queue.AddCopy(track);
             }
             QueueIndex = 0;
 
@@ -186,7 +194,7 @@ namespace CMusicPlayer.Media.Playback
             }
             catch (ArgumentOutOfRangeException)
             {
-                Queue.Add(track);
+                Queue.AddCopy(track);
                 userQueueIndex = Queue.Count;
             }
 

@@ -20,7 +20,7 @@ namespace CMusicPlayer.DependencyInjection
 //        https://github.com/ninject/ninject/wiki/Contextual-Binding
         public override void Load()
         {
-            Bind<IMediaPlayerController>().To<MediaPlayerContainer>().InSingletonScope();
+            Bind<IMediaPlayerController>().To<MediaPlayerController>().InSingletonScope();
             Bind<IDatabase>().To<Database>().InSingletonScope();
             Bind<FileManager>().ToSelf().InSingletonScope();
             Bind<IHttpService>().To<HttpService>();

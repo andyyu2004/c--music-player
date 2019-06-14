@@ -9,6 +9,7 @@ using CMusicPlayer.UI.Music.LocalTracks;
 using CMusicPlayer.UI.Music.Queue;
 using CMusicPlayer.UI.Utility;
 using CMusicPlayer.Util;
+using CMusicPlayer.Util.Dummies;
 
 namespace CMusicPlayer.UI.Main
 {
@@ -21,17 +22,15 @@ namespace CMusicPlayer.UI.Main
         private readonly CloudTracksView cloudTracksView;
         private readonly QueueView queueView;
         private readonly MainViewModel vm;
-        private readonly Action logoutCallback;
         private bool mouseDownOnSlider;
 
-        public MainWindow(LocalTracksView localTracksView, CloudTracksView cloudTracksView, QueueView queueView, MainViewModel vm, Action logoutCallback)
+        public MainWindow(LocalTracksView localTracksView, CloudTracksView cloudTracksView, QueueView queueView, MainViewModel vm)
         {
             InitializeComponent();
             this.localTracksView = localTracksView;
             this.cloudTracksView = cloudTracksView;
             this.queueView = queueView;
             this.vm = vm;
-            this.logoutCallback = logoutCallback;
 
             DataContext = vm;
 
@@ -42,10 +41,16 @@ namespace CMusicPlayer.UI.Main
         }
 
         private void OnLocalTracksClicked(object sender, RoutedEventArgs e)
-            => MainFrame.Content = localTracksView;
+        {
+            localTracksView.Refresh();
+            MainFrame.Content = localTracksView;
+        }
 
         private void OnCloudTracksClicked(object sender, RoutedEventArgs e)
-            => MainFrame.Content = cloudTracksView;
+        {
+            cloudTracksView.Refresh();
+            MainFrame.Content = cloudTracksView;
+        }
 
         private void OnQueueClicked(object sender, RoutedEventArgs e)
             => MainFrame.Content = queueView;

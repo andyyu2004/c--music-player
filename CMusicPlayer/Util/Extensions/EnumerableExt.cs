@@ -10,10 +10,7 @@ namespace CMusicPlayer.Util.Extensions
     {
         public static void ForEach<T>(this IEnumerable<T> xs, Action<T> f)
         {
-            foreach (var x in xs)
-            {
-                f(x);
-            }
+            foreach (var x in xs) f(x);
         }
 
         public static void Print<T>(this IEnumerable<T> xs) => Debug.WriteLine($"[{string.Join(",", xs)}]");

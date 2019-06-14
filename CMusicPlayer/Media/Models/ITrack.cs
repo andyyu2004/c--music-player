@@ -1,9 +1,11 @@
-﻿namespace CMusicPlayer.Media.Models
+﻿using CMusicPlayer.Internal.Interfaces;
+
+namespace CMusicPlayer.Media.Models
 {
     /**
-     * These interfaces probably are not necessary anymore, can remove and replace with the model implementations only
+     * Need to create copies otherwise data grid cannot tell same songs apart and behaviour is terrible
      */
-    public interface ITrack
+    internal interface ITrack : IShallowCopyable
     {
         string? Artist { get; set; }
         long? ArtistId { get; set; }

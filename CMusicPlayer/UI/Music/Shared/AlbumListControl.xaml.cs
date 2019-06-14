@@ -17,7 +17,7 @@ namespace CMusicPlayer.UI.Music.Shared
     /// <summary>
     /// Interaction logic for AlbumListControl.xaml
     /// </summary>
-    internal partial class AlbumListControl : ISearchable
+    internal partial class AlbumListControl : ISearchable, IRefreshable
     {
         private Func<Task<IEnumerable<IAlbum>>> getAlbums;
 
@@ -27,7 +27,7 @@ namespace CMusicPlayer.UI.Music.Shared
             set
             {
                 getAlbums = value;
-                RefreshAlbums();
+                Refresh();
             }
         }
 
@@ -41,10 +41,9 @@ namespace CMusicPlayer.UI.Music.Shared
             InitializeComponent();
             DataContext = this;
             getAlbums = vm.GetAlbums;
-            RefreshAlbums();
         }
 
-        private async void RefreshAlbums() => AlbumList.Refresh(await GetAlbums.Invoke());
+        public async void Refresh() => AlbumList.Refresh(await GetAlbums.Invoke());
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {

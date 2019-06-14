@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 using ATL;
+using CMusicPlayer.Internal.Interfaces;
 
 namespace CMusicPlayer.Media.Models
 {
-
-    public class TrackModel : ITrack
+    internal class TrackModel : ITrack
     {
         public string? Artist { get; set; }
         public long? ArtistId { get; set; }
@@ -23,7 +23,6 @@ namespace CMusicPlayer.Media.Models
         public uint? TrackNumber { get; set; }
         public string? Lyrics { get; set; }
         public uint? Year { get; set; }
-
 
         /// <summary>
         /// Create Track Object From TagLib.File
@@ -58,6 +57,8 @@ namespace CMusicPlayer.Media.Models
 
         public override string ToString() =>
             $"{Artist} -> {Album} -> {Title}";
+
+        public IShallowCopyable ShallowCopy() => (IShallowCopyable) MemberwiseClone();
 
         // ATL api
 //        public static TrackModel FromFile(string filename)

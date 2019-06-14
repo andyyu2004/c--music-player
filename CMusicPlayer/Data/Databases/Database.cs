@@ -82,9 +82,7 @@ namespace CMusicPlayer.Data.Databases
         public Task<IEnumerable<TrackModel>> LoadTracksByAlbum(IAlbum album)
         {
             using var db = new SQLiteConnection(ConnectionString);
-            return db.QueryAsync<TrackModel>(@"SELECT DISTINCT 
-                    artist, album, title, encoding, filename, path, duration, bitrate, lyrics, genre
-                    FROM Tracks WHERE artist=@Artist AND album = @Album AND year = @Year", album);
+            return db.QueryAsync<TrackModel>(@"SELECT * FROM Tracks WHERE artist=@Artist AND album = @Album AND year = @Year", album);
         }
 
         public async Task<Try<IEnumerable<TrackModel>>> TryLoadTracks()

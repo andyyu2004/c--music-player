@@ -10,6 +10,7 @@
       Title="QueueView" x:ClassModifier="internal">
     <Page.Resources>
         <converters:TimeConverter x:Key="TimeConverter" />
+        <converters:GridRowConverter x:Key="GridRowConverter"/>
     </Page.Resources>
     <Grid Background="{StaticResource DefaultColor}">
         <Grid.RowDefinitions>
@@ -17,57 +18,92 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <DataGrid
-            Name="TracksListView"
-            HeadersVisibility="Column"
-            AutoGenerateColumns="False" 
-            RowStyle="{StaticResource RowStyle}"
+            Name="TracksDataGrid"
+            HeadersVisibility="All"
+            AutoGenerateColumns="False"
             ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}"
-            TextSearch.Text="ArtistModel"
             HorizontalScrollBarVisibility="Visible"
-            ItemsSource="{Binding Queue}" 
             AllowDrop="True"
+            ItemsSource="{Binding Queue}"
+            TextSearch.Text="Artist"
             SelectionMode="Single"
+            Template="{DynamicResource DataGridControlTemplate}"
+            LoadingRow="OnLoadingRow"
             Drop="OnDrop"
-            MouseLeftButtonDown="OnPreviewMouseDown"
-            Template="{DynamicResource DataGridControlTemplate}">
-            <DataGrid.Resources>
-                <Style TargetType="ScrollBar">
+            PreviewMouseDoubleClick="OnPreviewMouseDoubleClick"
+            MouseLeftButtonDown="OnPreviewMouseDown">
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="{StaticResource DefaultColor}"/>
+                    <Style.Triggers>
+                        <DataTrigger Value="true">
+                            <DataTrigger.Binding>
+                                <MultiBinding Converter="{StaticResource GridRowConverter}">
+                                    <!-- This binds the ITrack Item -->
+                                    <Binding />
+                                    <Binding RelativeSource="{RelativeSource AncestorType=DataGrid}"
+                                             Path="ItemsSource" />
+                                    <Binding RelativeSource="{RelativeSource AncestorType=Page}"
+                                             Path="DataContext.CurrentIndex"/>
+                                </MultiBinding>
+                            </DataTrigger.Binding>
+                            <Setter Property="Background" Value="#383838"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.RowHeaderStyle>
+                <Style TargetType="DataGridRowHeader">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+            </DataGrid.RowHeaderStyle>
+            <!-- <DataGrid.Resources> -->
+                <!-- <Style TargetType="ScrollBar"> -->
                     <!--     <Setter Property="Foreground" Value="#222222" /> -->
                     <!--     <Setter Property="Background" Value="#444444" /> -->
                     <!-- <Setter Property="BorderThickness" Value="0" /> -->
-                </Style>
-            </DataGrid.Resources>
+                <!-- </Style> -->
+            <!-- </DataGrid.Resources> -->
             <DataGrid.ContextMenu>
-                <ContextMenu Background="Black" Opacity="0.4">
+                <ContextMenu Background="Black">
                     <MenuItem Header="Properties" Click="OnViewPropertiesClicked" />
                     <MenuItem Header="To Album" Click="OnToAlbum"/>
                     <MenuItem Header="To Artist" Click="OnToArtist"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
-            <DataGrid.Columns>
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Header="Title"
+                        Binding="{Binding Title}"
+                        Width="400"/>
                 <DataGridTextColumn
-                    Header="Title"
-                    Binding="{Binding Title}"
-                    Width="400">
-                </DataGridTextColumn>
-                <DataGridTextColumn
+                    CanUserSort="False"
                     Header="Album"
                     Binding="{Binding Album}"/>
                 <DataGridTextColumn
+                    CanUserSort="False"
                     Header="Artist"
                     Binding="{Binding Artist}"/>
                 <DataGridTextColumn
+                    CanUserSort="False"
                     Header="Duration"
                     Binding="{Binding Duration, Converter={StaticResource TimeConverter}, Mode=OneWay}" />
                 <DataGridTextColumn
+                    CanUserSort="False"
                     Header="Genre"
                     Binding="{Binding Genre}" />
                 <DataGridTextColumn
+                    CanUserSort="False"
                     Header="Encoding"
                     Binding="{Binding Encoding}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Label Grid.Row="1" Content="{Binding Queue.Count}" 
+        <!-- <Label Grid.Row="1" Content="{Binding CurrentIndex}" -->
+        <!--        ContentStringFormat="Current Index: {0}" Foreground="White"/> -->
+        <Label Grid.Row="1" Content="{Binding Queue.Count}"
                ContentStringFormat="Number Of Tracks: {0}" Foreground="White"/>
     </Grid>
 </Page>

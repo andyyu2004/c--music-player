@@ -65,7 +65,7 @@
                 Grid.Column="0" 
                 Grid.ColumnSpan="5"
                x:Name="AppBar" 
-               BarTitle="MusicPlayer"/>
+               BarTitle="CMusicPlayer"/>
 
 
         <Menu Grid.Row="1" Grid.ColumnSpan="5" Foreground="White" Background="Transparent" Grid.Column="0" Padding="0" Name="Menu">

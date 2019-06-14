@@ -2,7 +2,7 @@
 
 namespace CMusicPlayer.Internal.Types.EventArgs
 {
-    public class TrackEventArgs : System.EventArgs
+    internal class TrackEventArgs : System.EventArgs
     {
         public ITrack Track { get; }
         public int? Index { get; }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using CMusicPlayer.Configuration;
+using CMusicPlayer.Internal.Interfaces;
 using CMusicPlayer.Media.Models;
 using CMusicPlayer.Util;
 using Newtonsoft.Json;
@@ -8,6 +10,31 @@ namespace CMusicPlayer.Data.Network.Types
 {
     internal class TrackResponse : ITrack
     {
+        public TrackResponse()
+        {
+            
+        }
+
+        private TrackResponse(ITrack t)
+        {
+            Artist = t.Artist;
+            ArtistId = t.ArtistId;
+            Album = t.Album;
+            ArtistId = t.AlbumId;
+            Title = t.Title;
+            TrackId = t.TrackId;
+            Genre = t.Genre;
+            Filename = t.Filename;
+            SampleRate = t.SampleRate;
+            BitRate = t.BitRate;
+            Duration = t.Duration;
+            Encoding = t.Encoding;
+            BitDepth = t.BitDepth;
+            TrackNumber = t.TrackNumber;
+            Lyrics = t.Lyrics;
+            Year = t.Year;
+        }
+
         [JsonProperty("artist")]
         public string? Artist { get; set; }
 
@@ -60,6 +87,7 @@ namespace CMusicPlayer.Data.Network.Types
         private static string ApiEndpoint => Config.Settings[Constants.Authentication][Constants.ApiEndpoint] ?? throw new Exception("Api Exception was null when required");
         private static string JwtToken => Config.Settings[Constants.Authentication][Constants.JwtToken] ?? throw new Exception("JwtToken was null when required");
         public string? Path => $"{ApiEndpoint}/api/protected/music/tracks/{Encoding}/{TrackId}?jwt_token={JwtToken}";
+        public IShallowCopyable ShallowCopy() => (IShallowCopyable) MemberwiseClone();
     }
 
 }

@@ -17,7 +17,7 @@ namespace CMusicPlayer.UI.Music.Shared
     /// <summary>
     /// Interaction logic for ArtistListControl.xaml
     /// </summary>
-    internal partial class ArtistListControl : ISearchable
+    internal partial class ArtistListControl : ISearchable, IRefreshable
     {
         private Func<Task<IEnumerable<IArtist>>> getArtists;
         public Func<Task<IEnumerable<IArtist>>> GetArtists
@@ -26,7 +26,7 @@ namespace CMusicPlayer.UI.Music.Shared
             set
             {
                 getArtists = value;
-                RefreshArtists();
+                Refresh();
             }
         }
         public ObservableCollection<IArtist> ArtistList { get; } = new ObservableCollection<IArtist>();
@@ -38,10 +38,9 @@ namespace CMusicPlayer.UI.Music.Shared
             InitializeComponent();
             DataContext = this;
             getArtists = vm.GetArtists;
-            RefreshArtists();
         }
 
-        private async void RefreshArtists() => ArtistList.Refresh(await GetArtists());
+        public async void Refresh() => ArtistList.Refresh(await GetArtists());
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {

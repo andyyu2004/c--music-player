@@ -6,7 +6,7 @@ namespace CMusicPlayer.UI.Properties
     /// <summary>
     /// Interaction logic for PropertiesWindow.xaml
     /// </summary>
-    public partial class PropertiesWindow
+    internal partial class PropertiesWindow
     {
         public ITrack Track { get; }
 

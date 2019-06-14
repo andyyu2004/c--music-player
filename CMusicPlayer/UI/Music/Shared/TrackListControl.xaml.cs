@@ -17,7 +17,7 @@ namespace CMusicPlayer.UI.Music.Shared
     /// <summary>
     ///     Interaction logic for TrackListControl.xaml
     /// </summary>
-    internal partial class TrackListControl : ISearchable
+    internal partial class TrackListControl : ISearchable, IRefreshable
     {
         public event EventHandler<AlbumEventArgs> ToAlbum;
         public event EventHandler<ArtistEventArgs> ToArtist;
@@ -29,7 +29,7 @@ namespace CMusicPlayer.UI.Music.Shared
             set
             {
                 getTracks = value;
-                RefreshTracks();
+                Refresh();
             }
         }
 
@@ -43,11 +43,10 @@ namespace CMusicPlayer.UI.Music.Shared
             DataContext = this;
             this.vm = vm;
             getTracks = vm.GetTracks;
-            RefreshTracks();
             PlaybackControl.ShuffleAll += vm.ShuffleAll;
         }
 
-        private async void RefreshTracks() => SetTrackList(await GetTracks());
+        public async void Refresh() => SetTrackList(await GetTracks());
 
         private void SetTrackList(IEnumerable<ITrack> tracks) => TrackList.Refresh(tracks);
 

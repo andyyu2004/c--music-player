@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -21,6 +22,14 @@ namespace CMusicPlayer.UI.Music.Queue
             InitializeComponent();
             this.vm = vm;
             DataContext = vm;
+            vm.PropertyChanged += VmOnPropertyChanged;
+        }
+
+
+        private void VmOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(vm.CurrentIndex) || TracksDataGrid.Items.IsEmpty) return;
+            TracksDataGrid.ScrollIntoView(TracksDataGrid.Items[vm.CurrentIndex]);
         }
 
         private static bool IsMouseOnTargetRow(Visual? target, Func<IInputElement, Point> pos)
@@ -33,15 +42,15 @@ namespace CMusicPlayer.UI.Music.Queue
 
         private DataGridRow? GetDataGridRow(int index)
         {
-            if (TracksListView.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
+            if (TracksDataGrid.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
                 return null;
-            return (DataGridRow)TracksListView.ItemContainerGenerator.ContainerFromIndex(index);
+            return (DataGridRow)TracksDataGrid.ItemContainerGenerator.ContainerFromIndex(index);
         }
 
         private int? GetDataGridCurrentRowIndex(Func<IInputElement, Point> pos)
         {
             int? currIndex = null;
-            for (var i = 0; i < TracksListView.Items.Count; i++)
+            for (var i = 0; i < TracksDataGrid.Items.Count; i++)
             {
                 var item = GetDataGridRow(i);
                 if (IsMouseOnTargetRow(item, pos))
@@ -54,19 +63,19 @@ namespace CMusicPlayer.UI.Music.Queue
         {
             dragIndex = GetDataGridCurrentRowIndex(e.GetPosition);
             if (dragIndex == null) return;
-            TracksListView.SelectedIndex = dragIndex.Value;
-            if (!(TracksListView.Items[dragIndex.Value] is ITrack selectedTrack)) return; // Safety Check
-            if (DragDrop.DoDragDrop(TracksListView, selectedTrack, DragDropEffects.Move) != DragDropEffects.None)
-                TracksListView.SelectedItem = selectedTrack;
+            TracksDataGrid.SelectedIndex = dragIndex.Value;
+            if (!(TracksDataGrid.Items[dragIndex.Value] is ITrack selectedTrack)) return; // Safety Check
+            // Cannot move currently playing track
+            if (dragIndex == vm.CurrentIndex) return;
+            if (DragDrop.DoDragDrop(TracksDataGrid, selectedTrack, DragDropEffects.Move) != DragDropEffects.None)
+                TracksDataGrid.SelectedItem = selectedTrack;
 
         }
 
         private void OnDrop(object sender, DragEventArgs e)
         {
             var dropIndex = GetDataGridCurrentRowIndex(e.GetPosition);
-            // Treat Drag and Drop on same cell as attempted double click
-            if (dropIndex == dragIndex && TracksListView.SelectedItem is ITrack selectedTrack) SetTrack(selectedTrack, dragIndex);
-            if (dropIndex == null || dropIndex == TracksListView.Items.Count - 1) return;
+            if (dropIndex == null || dropIndex == vm.CurrentIndex) return;
             // Change from swap to removing and adding
             if (dragIndex == null) return;
             var tempTrack = vm.Queue[dragIndex.Value];
@@ -83,10 +92,9 @@ namespace CMusicPlayer.UI.Music.Queue
             vm.JumpToIndex(i.Value);
         }
 
-
         private void OnViewPropertiesClicked(object sender, RoutedEventArgs e)
         {
-            if (TracksListView.SelectedItem is ITrack track)
+            if (TracksDataGrid.SelectedItem is ITrack track)
                 vm.ViewProperties(track);
         }
 
@@ -97,6 +105,14 @@ namespace CMusicPlayer.UI.Music.Queue
 
         private void OnToArtist(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void OnLoadingRow(object sender, DataGridRowEventArgs e) => e.Row.Header = $"{e.Row.GetIndex()}: ";
+
+        private void OnPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (TracksDataGrid.SelectedItem is ITrack track)
+                SetTrack(track, TracksDataGrid.SelectedIndex);
         }
     }
 }

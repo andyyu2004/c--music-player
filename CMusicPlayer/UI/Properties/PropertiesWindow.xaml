@@ -8,7 +8,7 @@
         AllowsTransparency="True"
         ResizeMode="CanResizeWithGrip"
         mc:Ignorable="d"
-        Height="600" Width="450">
+        Height="600" Width="450" x:ClassModifier="internal">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Background" Value="#33666666"/>

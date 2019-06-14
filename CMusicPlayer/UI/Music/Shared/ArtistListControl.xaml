@@ -21,7 +21,7 @@
             RowStyle="{StaticResource RowStyle}"
             ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}"
             ItemsSource="{Binding ArtistList}"
-            AutoGenerateColumns="True"
+            AutoGenerateColumns="False"
             Template="{StaticResource DataGridControlTemplate}">
             <DataGrid.Columns>
                 <DataGridTextColumn

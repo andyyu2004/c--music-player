@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Security;
 using CMusicPlayer.Internal.Types.DataStructures;
-using CMusicPlayer.Properties;
 using Newtonsoft.Json;
-using static CMusicPlayer.Util.Constants;
 
 namespace CMusicPlayer.Configuration
 {
@@ -18,17 +15,16 @@ namespace CMusicPlayer.Configuration
             set => settings = (Dictionary<string, NDictionary<string, string>>) value;
         }
 
-        private static readonly string DefaultString = File.ReadAllText("./Configuration/default_settings.json");
+        private static readonly string DefaultSettings = File.ReadAllText("./Configuration/default_settings.json");
 
         private static readonly Dictionary<string, NDictionary<string, string>> DefaultJson =
-            JsonConvert.DeserializeObject<Dictionary<string, NDictionary<string, string>>>(DefaultString);
+            JsonConvert.DeserializeObject<Dictionary<string, NDictionary<string, string>>>(DefaultSettings);
 
         private const string Path = "./Configuration/settings.json";
-        
+
         static Config()
         {
-            if (!File.Exists(Path)) File.WriteAllText(Path, DefaultString);
-            
+            if (!File.Exists(Path)) File.WriteAllText(Path, DefaultSettings);
             Refresh();
         }
         
@@ -63,7 +59,7 @@ namespace CMusicPlayer.Configuration
         {
             var json = JsonConvert.SerializeObject(Settings, Formatting.Indented);
             Debug.WriteLine(json);
-            File.WriteAllTextAsync(Path, json);
+            File.WriteAllText(Path, json);
         }
 
     }

@@ -4,18 +4,23 @@ using CMusicPlayer.DependencyInjection;
 using CMusicPlayer.Media.Playback;
 using CMusicPlayer.UI.Login;
 using CMusicPlayer.UI.Main;
-using CMusicPlayer.UI.Music.CloudTracks;
-using CMusicPlayer.UI.Music.LocalTracks;
-using CMusicPlayer.UI.Music.Queue;
 using Microsoft.Win32;
 using Ninject;
 
+/**
+ * TODO
+ * Allow deletion and clear database
+ * Reduce memory consumption somehow
+ * Implement queue to album and artist
+ * Implement play album functionality in album view
+ * Order album view by track number
+ */
 namespace CMusicPlayer
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App
+    public partial class App 
     {
         private readonly StandardKernel kernel = new StandardKernel(new Bindings());
 
@@ -38,13 +43,7 @@ namespace CMusicPlayer
 
         private void StartApp()
         {
-            MainWindow = new MainWindow(
-                kernel.Get<LocalTracksView>(),
-                kernel.Get<CloudTracksView>(),
-                kernel.Get<QueueView>(),
-                kernel.Get<MainViewModel>(),
-                StartApp
-            );
+            MainWindow = kernel.Get<MainWindow>();
             kernel.Get<LoginWindow>();
         }
 

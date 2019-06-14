@@ -4,7 +4,7 @@ namespace CMusicPlayer.Util.Extensions
 {
     public static class MusicTypesExt
     {
-        public static bool Search(this ITrack x, string str)
+        internal static bool Search(this ITrack x, string str)
         {
             str = str.ToUpper();
             return x.Artist != null && x.Artist.ToUpper().Contains(str)

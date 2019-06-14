@@ -4,12 +4,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using CMusicPlayer.Internal.Types.EventArgs;
 using CMusicPlayer.Media.Models;
+using CMusicPlayer.UI.General;
 using CMusicPlayer.UI.Music.ViewModelBases;
 using CMusicPlayer.Util.Functional;
 
 namespace CMusicPlayer.UI.Music.Shared
 {
-    internal class TracksView : SwitchingPage
+    internal class TracksView : SwitchingPage, IRefreshable
     {
         private readonly TrackListControl trackListControl;
         private readonly AlbumListControl albumListControl;
@@ -26,8 +27,11 @@ namespace CMusicPlayer.UI.Music.Shared
             artistListControl.ToAlbumsByArtist += OnToAlbumsByArtist;
             trackListControl.ToAlbum += OnToTracksByAlbum;
             trackListControl.ToArtist += OnToAlbumsByArtist;
+
+            Refresh();
         }
 
+        public void Refresh() => CurrentControl.Refresh();
         /**
          * Called when artist is clicked from artistsListControl
          */
