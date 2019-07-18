@@ -1,5 +1,4 @@
-﻿
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using CMusicPlayer.CLI.Commands;
 using CMusicPlayer.CLI.Interpreting;
 using CMusicPlayer.CLI.Lexing;
@@ -11,13 +10,13 @@ using CMusicPlayer.Media.Playback;
 namespace CMusicPlayer.CLI
 {
     /// <summary>
-    /// Interaction logic for CommandLineWindow.xaml
+    ///     Interaction logic for CommandLineWindow.xaml
     /// </summary>
     internal partial class CommandLineWindow
     {
+        private readonly Interpreter interpreter;
         private readonly Lexer lexer;
         private readonly Parser parser;
-        private readonly Interpreter interpreter;
 
         public CommandLineWindow(IMediaPlayerController mp, Database db)
         {
@@ -28,7 +27,10 @@ namespace CMusicPlayer.CLI
             Clti.ReadLine += OnReadLine;
         }
 
-        private void OnReadLine(object sender, StringEventArgs e) => ExecuteCommand(e.Str);
+        private void OnReadLine(object sender, StringEventArgs e)
+        {
+            ExecuteCommand(e.Str);
+        }
 
         private void ExecuteCommand(string command)
         {

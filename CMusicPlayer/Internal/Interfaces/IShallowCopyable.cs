@@ -1,6 +1,4 @@
-﻿using System.CodeDom;
-
-namespace CMusicPlayer.Internal.Interfaces
+﻿namespace CMusicPlayer.Internal.Interfaces
 {
     internal interface IShallowCopyable
     {

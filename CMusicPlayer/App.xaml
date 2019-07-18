@@ -4,22 +4,23 @@
              xmlns:local="clr-namespace:CMusicPlayer"
              Startup="AppStart">
     <Application.Resources>
-         <ResourceDictionary>
-             <ResourceDictionary.MergedDictionaries>
-                 <ResourceDictionary Source="Styles/TransparentButton.xaml"/>
-                 <ResourceDictionary Source="Styles/NoHoverButton.xaml"/>
-                 <ResourceDictionary Source="Styles/Menu.xaml"/>
-                 <ResourceDictionary Source="Styles/TabItem.xaml"/>
-                 <ResourceDictionary Source="Styles/Label.xaml"/>
-                 <ResourceDictionary Source="Styles/Colours.xaml"/>
-                 <ResourceDictionary Source="Styles/ScrollBar.xaml"/>
-                 <ResourceDictionary Source="Styles/Grid.xaml"/>
-                 <ResourceDictionary Source="Styles/Templates/GridTemplate.xaml"/>
-                 <ResourceDictionary Source="Styles/Templates/SliderTemplate.xaml"/>
-                 <ResourceDictionary Source="Styles/Slider.xaml" />
-                 <ResourceDictionary Source="Styles/ContextMenu.xaml"/>
-                 <ResourceDictionary Source="Styles/Templates/ContextMenuTemplate.xaml"/>
-             </ResourceDictionary.MergedDictionaries>
-         </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/TransparentButton.xaml" />
+                <ResourceDictionary Source="Styles/NoHoverButton.xaml" />
+                <ResourceDictionary Source="Styles/Menu.xaml" />
+                <ResourceDictionary Source="Styles/TabItem.xaml" />
+                <ResourceDictionary Source="Styles/Label.xaml" />
+                <ResourceDictionary Source="Styles/Colours.xaml" />
+                <ResourceDictionary Source="Styles/ScrollBar.xaml" />
+                <ResourceDictionary Source="Styles/Grid.xaml" />
+                <ResourceDictionary Source="Styles/Templates/GridTemplate.xaml" />
+                <ResourceDictionary Source="Styles/Templates/SliderTemplate.xaml" />
+                <ResourceDictionary Source="Styles/Slider.xaml" />
+                <ResourceDictionary Source="Styles/ContextMenu.xaml" />
+                <ResourceDictionary Source="Styles/Templates/ContextMenuTemplate.xaml" />
+                <ResourceDictionary Source="Styles/ToggleButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

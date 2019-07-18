@@ -6,28 +6,35 @@ using Newtonsoft.Json;
 
 namespace CMusicPlayer.Configuration
 {
-    internal static class Config
+    internal static partial class Config
     {
+        public const string Authentication = "authentication";
+        public const string JwtToken = "jwt_token";
+        public const string UserId = "user_id";
+        public const string UserName = "username";
+        public const string ApiEndpoint = "api_endpoint";
+
+        private const string Path = "./Configuration/settings.json";
+
         private static Dictionary<string, NDictionary<string, string>> settings;
-        public static IReadOnlyDictionary<string, NDictionary<string, string>> Settings
-        {
-            get => settings;
-            set => settings = (Dictionary<string, NDictionary<string, string>>) value;
-        }
 
         private static readonly string DefaultSettings = File.ReadAllText("./Configuration/default_settings.json");
 
         private static readonly Dictionary<string, NDictionary<string, string>> DefaultJson =
             JsonConvert.DeserializeObject<Dictionary<string, NDictionary<string, string>>>(DefaultSettings);
 
-        private const string Path = "./Configuration/settings.json";
-
         static Config()
         {
             if (!File.Exists(Path)) File.WriteAllText(Path, DefaultSettings);
             Refresh();
         }
-        
+
+        public static IReadOnlyDictionary<string, NDictionary<string, string>> Settings
+        {
+            get => settings;
+            set => settings = (Dictionary<string, NDictionary<string, string>>) value;
+        }
+
         // Public methods
 
         /**
@@ -45,9 +52,15 @@ namespace CMusicPlayer.Configuration
             Serialize();
         }
 
-        public static void Default(string tablename) => settings[tablename] = DefaultJson[tablename];
+        public static void Default(string tablename)
+        {
+            settings[tablename] = DefaultJson[tablename];
+        }
 
-        private static void Refresh() => settings = Deserialize();
+        private static void Refresh()
+        {
+            settings = Deserialize();
+        }
 
         private static Dictionary<string, NDictionary<string, string>> Deserialize()
         {
@@ -61,6 +74,5 @@ namespace CMusicPlayer.Configuration
             Debug.WriteLine(json);
             File.WriteAllText(Path, json);
         }
-
     }
 }

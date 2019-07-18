@@ -3,9 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using CMusicPlayer.Configuration;
 using CMusicPlayer.Data.Repositories;
-using CMusicPlayer.Util;
 using CMusicPlayer.Util.Extensions;
-using static CMusicPlayer.Util.Constants;
 
 namespace CMusicPlayer.UI.Login
 {
@@ -13,11 +11,19 @@ namespace CMusicPlayer.UI.Login
     {
         private readonly LoginRepository repository;
 
+        private string? apiEndpoint = Config.Settings[Config.Authentication][Config.ApiEndpoint];
+
+        private string message = "";
+
+        public LoginViewModel(LoginRepository repository)
+        {
+            this.repository = repository;
+        }
+
         // Bound To View
         // Todo Add Validation
         public string Email { get; set; } = "";
 
-        private string? apiEndpoint = Config.Settings[Authentication][Constants.ApiEndpoint];
         public string? ApiEndpoint
         {
             get => apiEndpoint;
@@ -29,23 +35,27 @@ namespace CMusicPlayer.UI.Login
                     Message = "Invalid URI";
                     return;
                 }
+
                 // Only valid urls are saved into config
-                Config.Settings[Authentication][Constants.ApiEndpoint] = value;
+                Config.Settings[Config.Authentication][Config.ApiEndpoint] = value;
                 Message = string.Empty;
             }
-        } 
+        }
 
-        private string message = "";
         public string Message
         {
             get => message;
-            set { message = value; OnPropertyChanged(nameof(Message)); }
+            set
+            {
+                message = value;
+                OnPropertyChanged(nameof(Message));
+            }
         }
 
-        public LoginViewModel(LoginRepository repository) => this.repository = repository;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Returns boolean indicating success or failure of login attempt
+        ///     Returns boolean indicating success or failure of login attempt
         /// </summary>
         /// <param name="password"></param>
         /// <returns></returns>
@@ -57,10 +67,9 @@ namespace CMusicPlayer.UI.Login
             return res.IsSuccess;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        
-
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

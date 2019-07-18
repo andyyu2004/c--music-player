@@ -34,22 +34,22 @@
         <Border Name="Border">
             <Grid>
                 <ContentPresenter
-                        Margin="6,3,6,3"
-                        ContentSource="Header"
-                        RecognizesAccessKey="True" />
+                    Margin="6,3,6,3"
+                    ContentSource="Header"
+                    RecognizesAccessKey="True" />
                 <Popup
-                        Name="Popup"
-                        Placement="Bottom"
-                        IsOpen="{TemplateBinding IsSubmenuOpen}"
-                        AllowsTransparency="True"
-                        Focusable="False"
-                        PopupAnimation="Fade">
+                    Name="Popup"
+                    Placement="Bottom"
+                    IsOpen="{TemplateBinding IsSubmenuOpen}"
+                    AllowsTransparency="True"
+                    Focusable="False"
+                    PopupAnimation="Fade">
                     <Border
-                            Name="SubmenuBorder"
-                            SnapsToDevicePixels="True"
-                            Background="{StaticResource WindowBackgroundBrush}"
-                            BorderBrush="{StaticResource SolidBorderBrush}"
-                            BorderThickness="0.7">
+                        Name="SubmenuBorder"
+                        SnapsToDevicePixels="True"
+                        Background="{StaticResource WindowBackgroundBrush}"
+                        BorderBrush="{StaticResource SolidBorderBrush}"
+                        BorderThickness="0.7">
                         <ItemsPresenter />
                     </Border>
                 </Popup>
@@ -74,14 +74,14 @@
     <!-- ~1~ TopLevelItem @1@ -->
     <!-- -->
     <ControlTemplate
-            x:Key="{x:Static MenuItem.TopLevelItemTemplateKey}"
-            TargetType="{x:Type MenuItem}">
+        x:Key="{x:Static MenuItem.TopLevelItemTemplateKey}"
+        TargetType="{x:Type MenuItem}">
         <Border Name="Border">
             <Grid>
                 <ContentPresenter
-                        Margin="6,3,6,3"
-                        ContentSource="Header"
-                        RecognizesAccessKey="True" />
+                    Margin="6,3,6,3"
+                    ContentSource="Header"
+                    RecognizesAccessKey="True" />
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
@@ -98,8 +98,8 @@
     <!-- ~1~ SubmenuItem @1@ -->
     <!-- -->
     <ControlTemplate
-            x:Key="{x:Static MenuItem.SubmenuItemTemplateKey}"
-            TargetType="{x:Type MenuItem}">
+        x:Key="{x:Static MenuItem.SubmenuItemTemplateKey}"
+        TargetType="{x:Type MenuItem}">
         <Border Name="Border">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -109,35 +109,35 @@
                     <ColumnDefinition Width="13" />
                 </Grid.ColumnDefinitions>
                 <ContentPresenter
-                        Name="Icon"
-                        Margin="6,0,6,0"
-                        VerticalAlignment="Center"
-                        ContentSource="Icon" />
+                    Name="Icon"
+                    Margin="6,0,6,0"
+                    VerticalAlignment="Center"
+                    ContentSource="Icon" />
                 <Border
-                        Grid.Column="0" Name="Check"
-                        Width="13" Height="13"
-                        Visibility="Collapsed"
-                        Margin="6,0,6,0"
-                        Background="{StaticResource NormalBrush}"
-                        BorderThickness="1"
-                        BorderBrush="{StaticResource NormalBorderBrush}">
+                    Grid.Column="0" Name="Check"
+                    Width="13" Height="13"
+                    Visibility="Collapsed"
+                    Margin="6,0,6,0"
+                    Background="{StaticResource NormalBrush}"
+                    BorderThickness="1"
+                    BorderBrush="{StaticResource NormalBorderBrush}">
                     <Path
-                            Name="CheckMark"
-                            Width="7" Height="7"
-                            Visibility="Hidden"
-                            SnapsToDevicePixels="False"
-                            Stroke="{StaticResource GlyphBrush}"
-                            StrokeThickness="2"
-                            Data="M 0 0 L 7 7 M 0 7 L 7 0" />
+                        Name="CheckMark"
+                        Width="7" Height="7"
+                        Visibility="Hidden"
+                        SnapsToDevicePixels="False"
+                        Stroke="{StaticResource GlyphBrush}"
+                        StrokeThickness="2"
+                        Data="M 0 0 L 7 7 M 0 7 L 7 0" />
                 </Border>
                 <ContentPresenter
-                        Name="HeaderHost"
-                        Grid.Column="1"
-                        ContentSource="Header"
-                        RecognizesAccessKey="True" />
+                    Name="HeaderHost"
+                    Grid.Column="1"
+                    ContentSource="Header"
+                    RecognizesAccessKey="True" />
                 <TextBlock x:Name="InputGestureText"
-                               Grid.Column="2"
-                               Text="{TemplateBinding InputGestureText}"
+                           Grid.Column="2"
+                           Text="{TemplateBinding InputGestureText}"
                            Margin="5,2,0,2"
                            DockPanel.Dock="Right" />
             </Grid>
@@ -163,8 +163,8 @@
     </ControlTemplate>
     <!-- ~1~ SubmenuHeader @1@ -->
     <ControlTemplate
-            x:Key="{x:Static MenuItem.SubmenuHeaderTemplateKey}"
-            TargetType="{x:Type MenuItem}">
+        x:Key="{x:Static MenuItem.SubmenuHeaderTemplateKey}"
+        TargetType="{x:Type MenuItem}">
         <Border Name="Border">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -174,40 +174,40 @@
                     <ColumnDefinition Width="13" />
                 </Grid.ColumnDefinitions>
                 <ContentPresenter
-                        Name="Icon"
-                        Margin="6,0,6,0"
-                        VerticalAlignment="Center"
-                        ContentSource="Icon" />
+                    Name="Icon"
+                    Margin="6,0,6,0"
+                    VerticalAlignment="Center"
+                    ContentSource="Icon" />
                 <ContentPresenter
-                        Name="HeaderHost"
-                        Grid.Column="1"
-                        ContentSource="Header"
-                        RecognizesAccessKey="True" />
+                    Name="HeaderHost"
+                    Grid.Column="1"
+                    ContentSource="Header"
+                    RecognizesAccessKey="True" />
                 <TextBlock x:Name="InputGestureText"
-                               Grid.Column="2"
-                               Text="{TemplateBinding InputGestureText}"
-                               Margin="5,2,2,2"
-                               DockPanel.Dock="Right" />
+                           Grid.Column="2"
+                           Text="{TemplateBinding InputGestureText}"
+                           Margin="5,2,2,2"
+                           DockPanel.Dock="Right" />
                 <Path
-            Grid.Column="3"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Data="M 0 0 L 0 7 L 4 3.5 Z"
-            Fill="{StaticResource GlyphBrush}" />
+                    Grid.Column="3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Data="M 0 0 L 0 7 L 4 3.5 Z"
+                    Fill="{StaticResource GlyphBrush}" />
                 <Popup
-                Grid.Column="0" Name="Popup"
-                Placement="Right"
-                HorizontalOffset="-4"
-                IsOpen="{TemplateBinding IsSubmenuOpen}"
-                AllowsTransparency="True"
-                Focusable="False"
-                PopupAnimation="Fade">
+                    Grid.Column="0" Name="Popup"
+                    Placement="Right"
+                    HorizontalOffset="-4"
+                    IsOpen="{TemplateBinding IsSubmenuOpen}"
+                    AllowsTransparency="True"
+                    Focusable="False"
+                    PopupAnimation="Fade">
                     <Border
-                    Name="SubmenuBorder"
-                    SnapsToDevicePixels="True"
-                    Background="{StaticResource WindowBackgroundBrush}"
-                    BorderBrush="{StaticResource SolidBorderBrush}"
-                    BorderThickness="1" />
+                        Name="SubmenuBorder"
+                        SnapsToDevicePixels="True"
+                        Background="{StaticResource WindowBackgroundBrush}"
+                        BorderBrush="{StaticResource SolidBorderBrush}"
+                        BorderThickness="1" />
                 </Popup>
             </Grid>
         </Border>
@@ -231,7 +231,7 @@
 
     <Style x:Key="{x:Type MenuItem}" TargetType="{x:Type MenuItem}">
         <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="White" />
         <Style.Triggers>
             <Trigger Property="Role" Value="TopLevelHeader">
                 <Setter Property="Template" Value="{StaticResource {x:Static MenuItem.TopLevelHeaderTemplateKey}}" />

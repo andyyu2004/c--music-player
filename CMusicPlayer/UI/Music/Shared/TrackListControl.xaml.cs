@@ -19,23 +19,9 @@ namespace CMusicPlayer.UI.Music.Shared
     /// </summary>
     internal partial class TrackListControl : ISearchable, IRefreshable
     {
-        public event EventHandler<AlbumEventArgs> ToAlbum;
-        public event EventHandler<ArtistEventArgs> ToArtist;
-
-        private Func<Task<IEnumerable<ITrack>>> getTracks;
-        public Func<Task<IEnumerable<ITrack>>> GetTracks
-        {
-            get => getTracks;
-            set
-            {
-                getTracks = value;
-                Refresh();
-            }
-        }
-
         private readonly TracksViewModel vm;
 
-        public ObservableCollection<ITrack> TrackList { get; } = new ObservableCollection<ITrack>();
+        private Func<Task<IEnumerable<ITrack>>> getTracks;
 
         public TrackListControl(TracksViewModel vm)
         {
@@ -46,9 +32,34 @@ namespace CMusicPlayer.UI.Music.Shared
             PlaybackControl.ShuffleAll += vm.ShuffleAll;
         }
 
-        public async void Refresh() => SetTrackList(await GetTracks());
+        public Func<Task<IEnumerable<ITrack>>> GetTracks
+        {
+            get => getTracks;
+            set{
+                getTracks = value;
+                Refresh();
+            }
+        }
 
-        private void SetTrackList(IEnumerable<ITrack> tracks) => TrackList.Refresh(tracks);
+        public ObservableCollection<ITrack> TrackList { get; } = new ObservableCollection<ITrack>();
+
+        public async void Refresh()
+        {
+            SetTrackList(await GetTracks());
+        }
+
+        public bool FocusSearchElement()
+        {
+            return SearchControl.FocusInput();
+        }
+
+        public event EventHandler<AlbumEventArgs> ToAlbum;
+        public event EventHandler<ArtistEventArgs> ToArtist;
+
+        private void SetTrackList(IEnumerable<ITrack> tracks)
+        {
+            TrackList.Refresh(tracks);
+        }
 
         private void OnTrackDoubleClicked(object sender, MouseButtonEventArgs e)
         {
@@ -94,10 +105,9 @@ namespace CMusicPlayer.UI.Music.Shared
             }));
         }
 
-        private void SearchTextChanged(object sender, TextChangedEventArgs e) => TracksListGrid.ItemsSource = TrackList.Where(track => track.Search(SearchControl.SearchBox.Text));
-
-        public bool FocusSearchElement() => SearchControl.FocusInput();
-
-
+        private void SearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            TracksListGrid.ItemsSource = TrackList.Where(track => track.Search(SearchControl.SearchBox.Text));
+        }
     }
 }

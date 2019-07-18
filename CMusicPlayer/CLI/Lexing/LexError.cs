@@ -6,7 +6,6 @@ namespace CMusicPlayer.CLI.Lexing
     {
         public LexError(string message) : base(message)
         {
-            
         }
     }
 }

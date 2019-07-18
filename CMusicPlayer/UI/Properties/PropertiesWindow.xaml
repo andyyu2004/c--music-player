@@ -11,34 +11,34 @@
         Height="600" Width="450" x:ClassModifier="internal">
     <Window.Resources>
         <Style TargetType="TextBox">
-            <Setter Property="Background" Value="#33666666"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#33666666" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
 
         </Style>
     </Window.Resources>
     <Grid Background="#222222">
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="25" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <applicationBar:ApplicationBar x:Name="AppBar" Grid.Row="0"/>
+        <applicationBar:ApplicationBar x:Name="AppBar" Grid.Row="0" />
 
         <StackPanel Grid.Row="1">
             <StackPanel Orientation="Horizontal">
                 <Label Content="Title" />
-                <TextBox Text="{Binding Track.Title}"/>
+                <TextBox Text="{Binding Track.Title}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Album" />
-                <TextBox Text="{Binding Track.Album}"/>
+                <TextBox Text="{Binding Track.Album}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Artist" />
-                <TextBox Text="{Binding Track.Artist}"/>
+                <TextBox Text="{Binding Track.Artist}" />
             </StackPanel>
             <Label>Etc..</Label>
         </StackPanel>

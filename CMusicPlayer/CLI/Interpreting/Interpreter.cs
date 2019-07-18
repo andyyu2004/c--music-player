@@ -40,7 +40,6 @@ namespace CMusicPlayer.CLI.Interpreting
                 clti.WriteError(e.Message);
                 clti.WriteError(cliCommand.Help);
             }
-
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿{
-	"authentication": {
-		"jwt_token":  "",
-		"user_id":  "",
-		"username":  "",
-		"api_endpoint":  "http://localhost:3001"
-	}
+  "authentication": {
+    "jwt_token": "",
+    "user_id": "",
+    "username": "",
+    "api_endpoint": "http://localhost:3001"
+  }
 }

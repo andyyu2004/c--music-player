@@ -1,19 +1,19 @@
 ﻿<UserControl x:Class="CMusicPlayer.UI.Music.Shared.AlbumListControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:CMusicPlayer.UI.Music.Shared"
              xmlns:general="clr-namespace:CMusicPlayer.UI.General"
              xmlns:viewModelBases="clr-namespace:CMusicPlayer.UI.Music.ViewModelBases"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" x:ClassModifier="internal">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-        <DataGrid 
+        <DataGrid
             Name="AlbumsListGrid"
             HeadersVisibility="Column"
             MouseDoubleClick="OnDoubleClick"
@@ -21,28 +21,28 @@
             ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}"
             HorizontalScrollBarVisibility="Visible"
             ItemsSource="{Binding AlbumList}"
-            AutoGenerateColumns="False"            
+            AutoGenerateColumns="False"
             Template="{StaticResource DataGridControlTemplate}">
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Header="Album"
-                    Binding="{Binding Album}"/>
+                    Binding="{Binding Album}" />
                 <DataGridTextColumn
                     Header="Artist"
-                    Binding="{Binding Artist}"/>
+                    Binding="{Binding Artist}" />
                 <DataGridTextColumn
                     Header="Genre"
                     Binding="{Binding Genre}" />
                 <DataGridTextColumn
                     Header="Year"
-                    Binding="{Binding Year, StringFormat=0;;#}"/>
+                    Binding="{Binding Year, StringFormat=0;;#}" />
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel 
+        <StackPanel
             Orientation="Horizontal"
             Grid.Row="1">
-            <general:SearchControl x:Name="SearchControl" TextChanged="SearchTextChanged"/>
-            <Label Content="{Binding AlbumList.Count}" ContentStringFormat="Number of Albums: {0}" Foreground="White"/>
+            <general:SearchControl x:Name="SearchControl" TextChanged="SearchTextChanged" />
+            <Label Content="{Binding AlbumList.Count}" ContentStringFormat="Number of Albums: {0}" Foreground="White" />
         </StackPanel>
     </Grid>
 </UserControl>

@@ -6,7 +6,6 @@ namespace CMusicPlayer.CLI.Commands
     {
         public ArgumentError(string message) : base(message)
         {
-            
         }
     }
 }

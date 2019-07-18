@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CMusicPlayer.Internal.Types.EventArgs;
@@ -15,11 +14,18 @@ using CMusicPlayer.Util.Extensions;
 namespace CMusicPlayer.UI.Music.Shared
 {
     /// <summary>
-    /// Interaction logic for AlbumListControl.xaml
+    ///     Interaction logic for AlbumListControl.xaml
     /// </summary>
     internal partial class AlbumListControl : ISearchable, IRefreshable
     {
         private Func<Task<IEnumerable<IAlbum>>> getAlbums;
+
+        public AlbumListControl(TracksViewModel vm)
+        {
+            InitializeComponent();
+            DataContext = this;
+            getAlbums = vm.GetAlbums;
+        }
 
         public Func<Task<IEnumerable<IAlbum>>> GetAlbums
         {
@@ -31,19 +37,19 @@ namespace CMusicPlayer.UI.Music.Shared
             }
         }
 
-        public event EventHandler<AlbumEventArgs> ToTracksByAlbum;
-
         public ObservableCollection<IAlbum> AlbumList { get; } = new ObservableCollection<IAlbum>();
 
-        public AlbumListControl(TracksViewModel vm)
+        public async void Refresh()
         {
-
-            InitializeComponent();
-            DataContext = this;
-            getAlbums = vm.GetAlbums;
+            AlbumList.Refresh(await GetAlbums.Invoke());
         }
 
-        public async void Refresh() => AlbumList.Refresh(await GetAlbums.Invoke());
+        public bool FocusSearchElement()
+        {
+            return SearchControl.FocusInput();
+        }
+
+        public event EventHandler<AlbumEventArgs> ToTracksByAlbum;
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -51,9 +57,9 @@ namespace CMusicPlayer.UI.Music.Shared
                 ToTracksByAlbum?.Invoke(this, new AlbumEventArgs(album));
         }
 
-        private void SearchTextChanged(object sender, TextChangedEventArgs e) => 
+        private void SearchTextChanged(object sender, TextChangedEventArgs e)
+        {
             AlbumsListGrid.ItemsSource = AlbumList.Where(x => x.Search(SearchControl.SearchBox.Text));
-
-        public bool FocusSearchElement() => SearchControl.FocusInput();
+        }
     }
 }

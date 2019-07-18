@@ -8,7 +8,6 @@ using CMusicPlayer.Internal.Types.DataStructures;
 using CMusicPlayer.UI.Utility;
 using CMusicPlayer.Util.Extensions;
 using CMusicPlayer.Util.Functional;
-using static CMusicPlayer.Util.Constants;
 
 //using MusicPlayer.Internal.Types;
 //using MusicPlayer.Util;
@@ -16,21 +15,13 @@ using static CMusicPlayer.Util.Constants;
 namespace CMusicPlayer.UI.Login
 {
     /// <summary>
-    /// Interaction logic for LoginWindow.xaml
+    ///     Interaction logic for LoginWindow.xaml
     /// </summary>
     internal partial class LoginWindow
     {
+        private readonly NDictionary<string, string> auth = Config.Settings[Config.Authentication];
 
         private readonly LoginViewModel vm;
-
-        // Considered logged in if there exists token, api, and userid
-        public bool IsLoggedIn => (!auth[JwtToken]?.IsEmpty() ?? false)
-                                  && (!auth[ApiEndpoint]?.IsEmpty() ?? false)
-                                  && (!auth[UserId]?.IsEmpty() ?? false);
-
-        private readonly NDictionary<string, string> auth = Config.Settings[Authentication];
-
-        public ICommand SubmitCommand { get; }
 
         public LoginWindow(LoginViewModel loginViewModel)
         {
@@ -40,13 +31,20 @@ namespace CMusicPlayer.UI.Login
 
             new ApplicationBarEventHandler(this, Bar, new Action<int>(Application.Current.Shutdown).Partial(0));
 
-            Config.CreateNewTable(Authentication);
-            
+            Config.CreateNewTable(Config.Authentication);
+
             SubmitCommand = new AsyncCommand(SubmitLoginRequest);
 
             if (!IsLoggedIn) Show();
             else ToMainWindow();
         }
+
+        // Considered logged in if there exists token, api, and userid
+        public bool IsLoggedIn => (!auth[Config.JwtToken]?.IsEmpty() ?? false)
+                                  && (!auth[Config.ApiEndpoint]?.IsEmpty() ?? false)
+                                  && (!auth[Config.UserId]?.IsEmpty() ?? false);
+
+        public ICommand SubmitCommand { get; }
 
         private async Task SubmitLoginRequest()
         {
@@ -56,6 +54,7 @@ namespace CMusicPlayer.UI.Login
                 MessageLabel.Content = "Please Enter Email And Password";
                 return;
             }
+
             if (!await vm.OnLoginClicked(PasswordTextInput.Password)) return;
             ToMainWindow();
         }
@@ -66,8 +65,9 @@ namespace CMusicPlayer.UI.Login
             Close();
         }
 
-        private void UseOffline(object sender, RoutedEventArgs e) => ToMainWindow();
+        private void UseOffline(object sender, RoutedEventArgs e)
+        {
+            ToMainWindow();
+        }
     }
-
-
 }

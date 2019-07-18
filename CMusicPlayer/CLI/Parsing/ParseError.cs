@@ -6,7 +6,6 @@ namespace CMusicPlayer.CLI.Parsing
     {
         public ParseError(string message) : base(message)
         {
-
         }
     }
 }

@@ -46,6 +46,7 @@
     <None Remove="Styles\Templates\ContextMenuTemplate.xaml" />
     <None Remove="Styles\Templates\GridTemplate.xaml" />
     <None Remove="Styles\Templates\SliderTemplate.xaml" />
+    <None Remove="Styles\Templates\ToggleButton.xaml" />
     <None Remove="Styles\TransparentButton.xaml" />
     <None Remove="UI\ApplicationBar\ApplicationBar.xaml" />
     <None Remove="UI\General\SearchControl.xaml" />

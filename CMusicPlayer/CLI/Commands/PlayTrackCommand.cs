@@ -9,9 +9,9 @@ namespace CMusicPlayer.CLI.Commands
 {
     internal class PlayTrackCommand : MediaCommand
     {
-        private readonly Database db;
-        private readonly Token artistFlag = new Token("&r", TokenType.ArgFlag);
         private readonly Token albumFlag = new Token("&l", TokenType.ArgFlag);
+        private readonly Token artistFlag = new Token("&r", TokenType.ArgFlag);
+        private readonly Database db;
 
         public PlayTrackCommand(CommandLineTextInterface clti, IMediaPlayerController mp, Database db) : base(clti, mp)
         {
@@ -19,6 +19,9 @@ namespace CMusicPlayer.CLI.Commands
             HasAnonymousArg = true;
             DeclareArgs();
         }
+
+
+        public override string Help { get; } = "[Usage]: playt [&r <artist>] [&l <album>] <track>";
 
         private void DeclareArgs()
         {
@@ -46,9 +49,5 @@ namespace CMusicPlayer.CLI.Commands
             tracks.ForEach(Clti.WriteLine);
             if (tracks.Count == 1) Mp.SetTrack(tracks[0]);
         }
-
-
-        public override string Help { get; } = "[Usage]: playt [&r <artist>] [&l <album>] <track>";
-
     }
 }

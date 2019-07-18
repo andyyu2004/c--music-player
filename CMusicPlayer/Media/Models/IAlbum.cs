@@ -8,6 +8,5 @@
         string? Artist { get; set; }
         string? Genre { get; set; }
         uint? Year { get; set; }
-
     }
 }

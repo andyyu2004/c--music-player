@@ -1,31 +1,90 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Threading;
 using CMusicPlayer.Internal.Types.EventArgs;
 using CMusicPlayer.Media.Models;
 using CMusicPlayer.Statistics;
 using CMusicPlayer.UI.Music.ViewModelBases;
 using CMusicPlayer.Util.Extensions;
+using JetBrains.Annotations;
 using MusicPlayer.Internal.Types;
 
 namespace CMusicPlayer.Media.Playback
 {
-    internal class MediaPlayerController : IMediaPlayerController
+    internal class MediaPlayerController : IMediaPlayerController, INotifyPropertyChanged
     {
+        private readonly MediaPlayer mp = new MediaPlayer();
         private readonly StatisticsManager sm;
+
+        // Timer For Updating Now Playing Progress
+        private readonly Timer timer = new Timer(500);
+
+        private ITrack? currentTrack;
+
+        private bool isPlaying; // false is c# default value
+
+        private int queueIndex = -1;
+
+        private bool tempIsPlaying;
+
+        private List<ITrack> tracks = new List<ITrack>();
+
+        // Where the generated queue should begin (default 0)
+        private int userQueueIndex;
+
+        // 0 <= volume <= 1; default = 0.5
+        private double volume = 1;
+        
+
+        public MediaPlayerController(StatisticsManager sm)
+        {
+            this.sm = sm;
+            timer.Elapsed += OnTimeElapsed;
+            timer.Start();
+            mp.MediaEnded += (sender, args) =>
+            {
+                if (RepeatEnabled) RepeatTrack();
+                else SkipToNext();
+            };
+            mp.Volume = 1;
+        }
 
         public static int QueueLength { get; } = 10;
 
-        public ObservableCollection<ITrack> Queue { get; } = new ObservableCollection<ITrack>();
+        private bool repeatEnabled;
+        public bool RepeatEnabled
+        {
+            get => repeatEnabled;
+            set
+            {
+                if (value == repeatEnabled) return;
+                repeatEnabled = value;
+                OnPropertyChanged(nameof(RepeatEnabled));
+            }
+        }
+
+        // Only replays on automatic completion
+        private bool shuffleEnabled = true;
+        public bool ShuffleEnabled
+        {
+            get => shuffleEnabled;
+            set
+            {
+                shuffleEnabled = value;
+                OnPropertyChanged(nameof(ShuffleEnabled));
+            }
+        }
 
         public string CurrentLibrary { get; private set; } = "";
 
-        private List<ITrack> tracks = new List<ITrack>();
+        public ObservableCollection<ITrack> Queue { get; } = new ObservableCollection<ITrack>();
+
         public List<ITrack> Tracks
         {
             get => tracks;
@@ -36,25 +95,16 @@ namespace CMusicPlayer.Media.Playback
             }
         }
 
-        private readonly MediaPlayer mp = new MediaPlayer();
-
-        // Timer For Updating Now Playing Progress
-        private readonly Timer timer = new Timer(500);
-
-        private bool isPlaying; // false is c# default value
         public bool IsPlaying
         {
             get => isPlaying;
-            private set { isPlaying = value; OnPlaybackStateChanged(value); }
+            private set
+            {
+                isPlaying = value;
+                OnPlaybackStateChanged(value);
+            }
         }
 
-        private bool tempIsPlaying;
-        private bool shuffle = true;
-
-        // Where the generated queue should begin (default 0)
-        private int userQueueIndex;
-
-        private int queueIndex = -1;
         public int QueueIndex
         {
             get => queueIndex;
@@ -68,15 +118,16 @@ namespace CMusicPlayer.Media.Playback
             }
         }
 
-        private ITrack? currentTrack;
         public ITrack? CurrentTrack
         {
             get => currentTrack;
-            private set { currentTrack = value; OnCurrentTrackChanged(value); }
+            private set
+            {
+                currentTrack = value;
+                OnCurrentTrackChanged(value);
+            }
         }
 
-        // 0 <= volume <= 1; default = 0.5
-        private double volume = 1;
         public double Volume
         {
             get => volume;
@@ -87,47 +138,14 @@ namespace CMusicPlayer.Media.Playback
             }
         }
 
-        public MediaPlayerController(StatisticsManager sm)
-        {
-            this.sm = sm;
-            timer.Elapsed += OnTimeElapsed;
-            timer.Start();
-            mp.MediaEnded += (sender, args) => SkipToNext();
-            mp.Volume = 1;
-        }
-
         // Events
         public event EventHandler<PlayerUpdateEventArgs> PositionUpdated;
         public event EventHandler<PlaybackStateChangedEventArgs> PlaybackStateChanged;
         public event EventHandler<StringEventArgs> LibraryChanged;
 
-        protected virtual void OnPlaybackStateChanged(bool state)
-            => PlaybackStateChanged?.Invoke(this, new PlaybackStateChangedEventArgs(state));
-
-
-        private void OnTimeElapsed(object sender, ElapsedEventArgs e)
-        {
-            try
-            {
-                mp.Dispatcher.Invoke(() => PositionUpdated?.Invoke(this, new PlayerUpdateEventArgs(mp.Position, mp.NaturalDuration)));
-            }
-            catch (TaskCanceledException exception)
-            {
-                Console.WriteLine(exception);
-            }
-        }
-
-  
 
         // Events
         public event EventHandler<TrackEventArgs> CurrentTrackChanged;
-
-        protected virtual void OnCurrentTrackChanged(ITrack? track)
-        {
-            if (track == null) return;
-            LoadCurrentTrack();
-            CurrentTrackChanged?.Invoke(this, new TrackEventArgs(track));
-        }
 
         public void PlayTrackNext(ITrack track)
         {
@@ -137,7 +155,8 @@ namespace CMusicPlayer.Media.Playback
 
         public void SkipToPrev()
         {
-            if (mp.Position.TotalSeconds > 2) { mp.Position = TimeSpan.FromMilliseconds(0); }
+            if (mp.Position.TotalSeconds > 2)
+                mp.Position = TimeSpan.FromMilliseconds(0);
             else QueueIndex--;
         }
 
@@ -147,23 +166,6 @@ namespace CMusicPlayer.Media.Playback
             QueueIndex++;
         }
 
-        public void FillQueue()
-        {
-            var repeats = QueueLength - (Queue.Count - QueueIndex);
-            var trackIndex = Tracks.FindIndex(x => x.TrackId == CurrentTrack?.TrackId);
-            for (var i = 0; i < repeats; i++)
-            {
-                var track = shuffle ? Tracks.RandomElement() : Tracks[trackIndex + i];
-                if (track != null) Queue.AddCopy(track);
-            }
-        }
-
-        private void ClearQueue()
-        {
-            Queue.Clear();
-            userQueueIndex = 0;
-        }
-
         public void ShuffleAll()
         {
             if (Tracks.Count == 0)
@@ -171,13 +173,15 @@ namespace CMusicPlayer.Media.Playback
                 MessageBox.Show("Empty Track List");
                 return;
             }
+
             ClearQueue();
-            
+
             for (var i = 0; i < QueueLength; i++)
             {
                 var track = Tracks.RandomElement();
                 if (track != null) Queue.AddCopy(track);
             }
+
             QueueIndex = 0;
 
             Play();
@@ -187,7 +191,6 @@ namespace CMusicPlayer.Media.Playback
 
         public void AddTrackToQueue(ITrack track)
         {
-            // Just for safety
             try
             {
                 Queue.Insert(++userQueueIndex, track);
@@ -195,24 +198,8 @@ namespace CMusicPlayer.Media.Playback
             catch (ArgumentOutOfRangeException)
             {
                 Queue.AddCopy(track);
-                userQueueIndex = Queue.Count;
+                userQueueIndex = Queue.Count - 1;
             }
-
-        }
-
-        private void LoadCurrentTrack()
-        {
-            SavePlaybackState(); // This is required, otherwise will not automatically start
-            mp.Open(new Uri(currentTrack?.Path));
-            RestorePlaybackState();
-        }
-
-        private void SavePlaybackState() => tempIsPlaying = IsPlaying;
-
-        private void RestorePlaybackState()
-        {
-            if (tempIsPlaying) Play();
-            else Pause();
         }
 
         public void SetTrackList(TracksViewModel sender, List<ITrack> xs)
@@ -236,7 +223,8 @@ namespace CMusicPlayer.Media.Playback
             else Play();
         }
 
-        public void SeekTo(double pos) => mp.Position = TimeSpan.FromSeconds(pos);
+        public void SeekTo(double pos) => 
+            mp.Position = TimeSpan.FromSeconds(pos);
 
         public void Play()
         {
@@ -245,6 +233,7 @@ namespace CMusicPlayer.Media.Playback
                 if (Queue.Count > 0) SetTrack(Queue[0]);
                 return;
             }
+
             IsPlaying = true;
             mp.Play();
         }
@@ -261,6 +250,69 @@ namespace CMusicPlayer.Media.Playback
             Pause();
             mp.Stop();
         }
-    }
 
+        protected virtual void OnPlaybackStateChanged(bool state) => 
+            PlaybackStateChanged?.Invoke(this, new PlaybackStateChangedEventArgs(state));
+
+
+        private void OnTimeElapsed(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                mp.Dispatcher.Invoke(() =>
+                    PositionUpdated?.Invoke(this, new PlayerUpdateEventArgs(mp.Position, mp.NaturalDuration)));
+            }
+            catch (TaskCanceledException exception)
+            {
+                Console.WriteLine(exception);
+            }
+        }
+
+        protected virtual void OnCurrentTrackChanged(ITrack? track)
+        {
+            if (track == null) return;
+            LoadCurrentTrack();
+            CurrentTrackChanged?.Invoke(this, new TrackEventArgs(track));
+        }
+
+        public void FillQueue()
+        {
+            var repeats = QueueLength - (Queue.Count - QueueIndex);
+            var trackIndex = Tracks.FindIndex(x => x.TrackId == CurrentTrack?.TrackId);
+            for (var i = 0; i < repeats; i++)
+            {
+                var track = ShuffleEnabled ? Tracks.RandomElement() : Tracks[trackIndex + i];
+                if (track != null) Queue.AddCopy(track);
+            }
+        }
+
+        private void ClearQueue()
+        {
+            Queue.Clear();
+            userQueueIndex = -1;
+        }
+
+        private void LoadCurrentTrack()
+        {
+            SavePlaybackState(); // This is required, otherwise will not automatically start playing again automatically
+            mp.Open(new Uri(currentTrack?.Path));
+            RestorePlaybackState();
+        }
+
+        private void RepeatTrack() => mp.Position = TimeSpan.Zero;
+
+        private void SavePlaybackState() => tempIsPlaying = IsPlaying;
+
+        private void RestorePlaybackState()
+        {
+            if (tempIsPlaying) Play();
+            else Pause();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) => 
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }

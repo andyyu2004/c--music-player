@@ -10,10 +10,15 @@ namespace CMusicPlayer.UI.Music.Queue
 {
     internal class QueueViewModel : MusicViewModel, INotifyPropertyChanged
     {
+        private int currentIndex;
+
+        public QueueViewModel(IMediaPlayerController mp) : base(mp)
+        {
+            mp.CurrentTrackChanged += (sender, args) => CurrentIndex = mp.QueueIndex;
+        }
 
         public ObservableCollection<ITrack> Queue => Mp.Queue;
 
-        private int currentIndex;
         public int CurrentIndex
         {
             get => currentIndex;
@@ -24,14 +29,17 @@ namespace CMusicPlayer.UI.Music.Queue
             }
         }
 
-        public QueueViewModel(IMediaPlayerController mp) : base(mp) => 
-            mp.CurrentTrackChanged += (sender, args) => CurrentIndex = mp.QueueIndex;
-
-        public void JumpToIndex(int index) => Mp.JumpToIndex(index);
-
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void JumpToIndex(int index)
+        {
+            Mp.JumpToIndex(index);
+        }
+
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) => 
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

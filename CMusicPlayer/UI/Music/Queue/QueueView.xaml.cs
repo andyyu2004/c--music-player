@@ -5,17 +5,22 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using CMusicPlayer.Data.Network.Types;
+using CMusicPlayer.Internal.Types.EventArgs;
 using CMusicPlayer.Media.Models;
 
 namespace CMusicPlayer.UI.Music.Queue
 {
     /// <summary>
-    /// Interaction logic for QueueView.xaml
+    ///     Interaction logic for QueueView.xaml
     /// </summary>
     internal partial class QueueView
     {
         private readonly QueueViewModel vm;
         private int? dragIndex;
+
+        public event EventHandler<ArtistEventArgs> ToArtist;
+        public event EventHandler<AlbumEventArgs> ToAlbum; 
 
         public QueueView(QueueViewModel vm)
         {
@@ -36,7 +41,7 @@ namespace CMusicPlayer.UI.Music.Queue
         {
             if (target == null) return false;
             var posBounds = VisualTreeHelper.GetDescendantBounds(target);
-            var mousePos = pos((IInputElement)target);
+            var mousePos = pos((IInputElement) target);
             return posBounds.Contains(mousePos);
         }
 
@@ -44,7 +49,7 @@ namespace CMusicPlayer.UI.Music.Queue
         {
             if (TracksDataGrid.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
                 return null;
-            return (DataGridRow)TracksDataGrid.ItemContainerGenerator.ContainerFromIndex(index);
+            return (DataGridRow) TracksDataGrid.ItemContainerGenerator.ContainerFromIndex(index);
         }
 
         private int? GetDataGridCurrentRowIndex(Func<IInputElement, Point> pos)
@@ -56,6 +61,7 @@ namespace CMusicPlayer.UI.Music.Queue
                 if (IsMouseOnTargetRow(item, pos))
                     currIndex = i;
             }
+
             return currIndex;
         }
 
@@ -69,7 +75,6 @@ namespace CMusicPlayer.UI.Music.Queue
             if (dragIndex == vm.CurrentIndex) return;
             if (DragDrop.DoDragDrop(TracksDataGrid, selectedTrack, DragDropEffects.Move) != DragDropEffects.None)
                 TracksDataGrid.SelectedItem = selectedTrack;
-
         }
 
         private void OnDrop(object sender, DragEventArgs e)
@@ -100,14 +105,26 @@ namespace CMusicPlayer.UI.Music.Queue
 
         private void OnToAlbum(object sender, RoutedEventArgs e)
         {
-            
+            if (!(TracksDataGrid.SelectedItem is ITrack track)) return;
+            var album = new AlbumModel(track.AlbumId) {Album = track.Album, Artist = track.Artist, Year = track.Year};
+            ToAlbum?.Invoke(this, new AlbumEventArgs(album));
         }
 
         private void OnToArtist(object sender, RoutedEventArgs e)
         {
+            if (!(TracksDataGrid.SelectedItem is ITrack track)) return;
+            var artist = new ArtistModel(track.Artist)
+            {
+                Id = track.ArtistId
+            };
+            ToArtist?.Invoke(this, new ArtistEventArgs(artist));
+
         }
 
-        private void OnLoadingRow(object sender, DataGridRowEventArgs e) => e.Row.Header = $"{e.Row.GetIndex()}: ";
+        private void OnLoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = $"{e.Row.GetIndex()}: ";
+        }
 
         private void OnPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {

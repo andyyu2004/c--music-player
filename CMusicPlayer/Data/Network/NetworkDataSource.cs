@@ -13,16 +13,20 @@ namespace CMusicPlayer.Data.Network
     {
         private readonly IHttpService httpService;
 
-        public NetworkDataSource(IHttpService httpService) => this.httpService = httpService;
+        public NetworkDataSource(IHttpService httpService)
+        {
+            this.httpService = httpService;
+        }
 
         /// <summary>
-        /// Checks For Errors In Response And Returns <c>Either Exception / string</c>
+        ///     Checks For Errors In Response And Returns <c>Either Exception / string</c>
         /// </summary>
         /// <param name="res"></param>
         /// <param name="message"></param>
         /// <returns></returns>
         private static Try<string> ProcessResponse(Try<string> res, string message)
-            => res.Match<Try<string>>(e =>
+        {
+            return res.Match<Try<string>>(e =>
             {
                 switch (e)
                 {
@@ -34,10 +38,11 @@ namespace CMusicPlayer.Data.Network
                         return new Exception("Unknown Error Occurred");
                 }
             }, str => str);
+        }
 
 
         /// <summary>
-        /// Retrieves user salt from server
+        ///     Retrieves user salt from server
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
@@ -48,7 +53,7 @@ namespace CMusicPlayer.Data.Network
         }
 
         /// <summary>
-        /// Posts User object to server to attempt authentication
+        ///     Posts User object to server to attempt authentication
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
@@ -63,7 +68,7 @@ namespace CMusicPlayer.Data.Network
         {
             Debug.WriteLine("Fetching Tracks");
             var tracks = await httpService.GetAsync(
-                $"api/protected/music/tracks");
+                "api/protected/music/tracks");
             return ProcessResponse(tracks, "Failed To Get Tracks");
         }
 
@@ -78,7 +83,7 @@ namespace CMusicPlayer.Data.Network
         {
             var albums =
                 await httpService.GetAsync(
-                    $"api/protected/music/albums");
+                    "api/protected/music/albums");
             return ProcessResponse(albums, "Failed To Get Albums");
         }
 
@@ -86,7 +91,7 @@ namespace CMusicPlayer.Data.Network
         {
             var artists =
                 await httpService.GetAsync(
-                    $"api/protected/music/artists");
+                    "api/protected/music/artists");
             return ProcessResponse(artists, "Failed To Get Artists");
         }
 

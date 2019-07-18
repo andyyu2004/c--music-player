@@ -8,8 +8,8 @@
         Closing="OnClosing"
         Title="CommandLineWindow" Height="450" Width="800" x:ClassModifier="internal">
     <Grid Background="Black">
-        <local:CommandLineTextInterface 
+        <local:CommandLineTextInterface
             x:Name="Clti"
-            CommandList="{Binding CommandList}"/>
+            CommandList="{Binding CommandList}" />
     </Grid>
 </Window>

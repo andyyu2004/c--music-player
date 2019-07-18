@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CMusicPlayer.Util.Dummies
+﻿namespace CMusicPlayer.Util.Dummies
 {
-    internal class CloudTracksViewDummy 
+    internal class CloudTracksViewDummy
     {
     }
 }

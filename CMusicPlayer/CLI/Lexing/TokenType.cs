@@ -2,7 +2,8 @@
 {
     internal enum TokenType
     {
-        Argument, Flag, ArgFlag
+        Argument,
+        Flag,
+        ArgFlag
     }
-
 }

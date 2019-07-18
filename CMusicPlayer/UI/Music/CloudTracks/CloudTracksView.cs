@@ -5,10 +5,10 @@ namespace CMusicPlayer.UI.Music.CloudTracks
 {
     internal class CloudTracksView : TracksView
     {
-        public CloudTracksView(TrackListControl trackListControl, AlbumListControl albumListControl, ArtistListControl artistListControl, TracksViewModel vm)
+        public CloudTracksView(TrackListControl trackListControl, AlbumListControl albumListControl,
+            ArtistListControl artistListControl, TracksViewModel vm)
             : base(trackListControl, albumListControl, artistListControl, vm)
         {
-
         }
     }
 }

@@ -8,34 +8,21 @@ using CMusicPlayer.Configuration;
 using CMusicPlayer.Data.Network.Types.Exceptions;
 using CMusicPlayer.Internal.Types.DataStructures;
 using CMusicPlayer.Internal.Types.Functional;
-using static CMusicPlayer.Util.Constants;
 
 namespace CMusicPlayer.Data.Network
 {
     internal class HttpService : IHttpService
     {
-       private readonly HttpClient client = new HttpClient();
-
-       private static readonly NDictionary<string, string> Auth = Config.Settings[Authentication];
-       private static string BaseUrl => Auth[ApiEndpoint] ?? string.Empty;
+        private static readonly NDictionary<string, string> Auth = Config.Settings[Config.Authentication];
+        private readonly HttpClient client = new HttpClient();
 
         public HttpService()
         {
 //            client.BaseAddress = new Uri(BaseUrl);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Auth[JwtToken]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Auth[Config.JwtToken]);
         }
 
-        private static async Task<Try<string>> ProcessResponse(HttpResponseMessage res)
-        {
-            switch (res.StatusCode)
-            {
-                case HttpStatusCode.OK:
-                    var resString = await res.Content.ReadAsStringAsync();
-                    return new Try<string>(resString);
-                default:
-                    return new HttpException($"Request Status code not OK : {res.StatusCode}", res.StatusCode);
-            }
-        }
+        private static string BaseUrl => Auth[Config.ApiEndpoint] ?? string.Empty;
 
         public async Task<Try<string>> GetAsync(string uri)
         {
@@ -61,6 +48,18 @@ namespace CMusicPlayer.Data.Network
             catch (Exception e)
             {
                 return e;
+            }
+        }
+
+        private static async Task<Try<string>> ProcessResponse(HttpResponseMessage res)
+        {
+            switch (res.StatusCode)
+            {
+                case HttpStatusCode.OK:
+                    var resString = await res.Content.ReadAsStringAsync();
+                    return new Try<string>(resString);
+                default:
+                    return new HttpException($"Request Status code not OK : {res.StatusCode}", res.StatusCode);
             }
         }
     }

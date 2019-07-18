@@ -22,6 +22,8 @@ namespace CMusicPlayer.Util.Extensions
         }
 
         public static bool Search(this IArtist x, string s)
-            => x.Artist != null && x.Artist.ToUpper().Contains(s.ToUpper());
+        {
+            return x.Artist != null && x.Artist.ToUpper().Contains(s.ToUpper());
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -16,80 +15,28 @@ namespace CMusicPlayer.UI.Main
 {
     internal class MainViewModel : INotifyPropertyChanged
     {
-
         private readonly IMediaPlayerController controller;
 
         private string currentLibrary = "Nothing";
-        public string CurrentLibrary
-        {
-            get => currentLibrary;
-            set { currentLibrary = value; OnPropertyChanged(nameof(CurrentLibrary)); }
-        }
-
-        private string currentTrackTitle = "Nothing";
-        public string CurrentTrackTitle
-        {
-            get => currentTrackTitle;
-            private set { currentTrackTitle = value; OnPropertyChanged(nameof(CurrentTrackTitle)); }
-        }
 
         private string currentTrackAlbumArtist = "";
-        public string CurrentTrackAlbumArtist
-        {
-            get => currentTrackAlbumArtist;
-            private set { currentTrackAlbumArtist = value; OnPropertyChanged(nameof(CurrentTrackAlbumArtist)); }
-        }
+
+        private string currentTrackTitle = "Nothing";
+
+        private string notificationMessage = "";
+
+        // Path For PlayPauseButton
+        private string playPauseImagePath = "../../Images/play_icon.png";
 
         // Current Position Of Current Track
         // Integer values to prevent casting errors from string to double in format
         private int position;
-        public int Position
-        {
-            get => position;
-            set { position = value; OnPropertyChanged(nameof(Position)); }
-        }
 
         // Remaining Duration Of Current Track (Bind Remaining Time Indicator)
         private int remainingDuration;
-        public int RemainingDuration
-        {
-            get => remainingDuration;
-            set { remainingDuration = value; OnPropertyChanged(nameof(RemainingDuration)); }
-        }
 
         // Total Duration Of Current Track (To Bind Slider Max)
         private int totalDuration;
-        public int TotalDuration
-        {
-            get => totalDuration;
-            set { totalDuration = value; OnPropertyChanged(nameof(TotalDuration)); }
-        }
-
-        // Path For PlayPauseButton
-        private string playPauseImagePath = "../../Images/play_icon.png";
-        public string PlayPauseImagePath
-        {
-            get => playPauseImagePath;
-            private set { playPauseImagePath = value; OnPropertyChanged(nameof(PlayPauseImagePath)); }
-        }
-
-        private string notificationMessage = "";
-        public string NotificationMessage
-        {
-            get => notificationMessage;
-            set { notificationMessage = value; OnPropertyChanged(nameof(NotificationMessage)); }
-        }
-
-        // Playback Commands
-        public ICommand PlayPauseCommand { get; }
-        public ICommand PlayPrevCommand { get; }
-        public ICommand PlayNextCommand { get; }
-        public ICommand StopCommand { get; }
-
-        public ICommand OpenCliCommand { get; }
-        public ICommand OpenFileDialogCommand { get; }
-        public ICommand OpenFolderDialogCommand { get; }
-        public ICommand OpenPreferencesCommand { get; }
 
         [SuppressMessage("ReSharper", "SuggestBaseTypeForParameter")]
         public MainViewModel(IMediaPlayerController controller, FileManager fm, CommandLineWindow cli)
@@ -113,15 +60,121 @@ namespace CMusicPlayer.UI.Main
             controller.LibraryChanged += OnLibraryChanged;
         }
 
+        public string CurrentLibrary
+        {
+            get => currentLibrary;
+            set
+            {
+                currentLibrary = value;
+                OnPropertyChanged(nameof(CurrentLibrary));
+            }
+        }
+
+        public string CurrentTrackTitle
+        {
+            get => currentTrackTitle;
+            private set
+            {
+                currentTrackTitle = value;
+                OnPropertyChanged(nameof(CurrentTrackTitle));
+            }
+        }
+
+        public string CurrentTrackAlbumArtist
+        {
+            get => currentTrackAlbumArtist;
+            private set
+            {
+                currentTrackAlbumArtist = value;
+                OnPropertyChanged(nameof(CurrentTrackAlbumArtist));
+            }
+        }
+
+        public int Position
+        {
+            get => position;
+            set
+            {
+                position = value;
+                OnPropertyChanged(nameof(Position));
+            }
+        }
+
+        public int RemainingDuration
+        {
+            get => remainingDuration;
+            set
+            {
+                remainingDuration = value;
+                OnPropertyChanged(nameof(RemainingDuration));
+            }
+        }
+
+        public int TotalDuration
+        {
+            get => totalDuration;
+            set
+            {
+                totalDuration = value;
+                OnPropertyChanged(nameof(TotalDuration));
+            }
+        }
+
+        public string PlayPauseImagePath
+        {
+            get => playPauseImagePath;
+            private set
+            {
+                playPauseImagePath = value;
+                OnPropertyChanged(nameof(PlayPauseImagePath));
+            }
+        }
+
+        public string NotificationMessage
+        {
+            get => notificationMessage;
+            set
+            {
+                notificationMessage = value;
+                OnPropertyChanged(nameof(NotificationMessage));
+            }
+        }
+
+        // Two way bound
+        public bool ShuffleEnabled
+        {
+            get => controller.ShuffleEnabled;
+            set => controller.ShuffleEnabled = value;
+        }
+
+        public bool RepeatEnabled
+        {
+            get => controller.RepeatEnabled;
+            set => controller.RepeatEnabled = value;
+        }
+
+        // Playback Commands
+        public ICommand PlayPauseCommand { get; }
+        public ICommand PlayPrevCommand { get; }
+        public ICommand PlayNextCommand { get; }
+        public ICommand StopCommand { get; }
+
+        public ICommand OpenCliCommand { get; }
+        public ICommand OpenFileDialogCommand { get; }
+        public ICommand OpenFolderDialogCommand { get; }
+        public ICommand OpenPreferencesCommand { get; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private void OnLibraryChanged(object sender, StringEventArgs e) => CurrentLibrary = e.Str;
 
-        private void OnPlaybackStateChanged(object sender, PlaybackStateChangedEventArgs e) =>
+        private void OnPlaybackStateChanged(object sender, PlaybackStateChangedEventArgs e) => 
             PlayPauseImagePath = e.IsPlaying ? "../../Images/pause_icon.png" : "../../Images/play_icon.png";
 
         private void OnPositionUpdated(object sender, PlayerUpdateEventArgs e)
         {
-            Position = (int)e.Position;
-            TotalDuration = (int)e.Duration;
+            Position = (int) e.Position;
+            TotalDuration = (int) e.Duration;
             RemainingDuration = TotalDuration - Position;
         }
 
@@ -140,15 +193,17 @@ namespace CMusicPlayer.UI.Main
         }
 
         // Stops the slider moving when mouse down
-        public void OnSliderMouseDown() => controller.PositionUpdated -= OnPositionUpdated;
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnSliderMouseDown()
+        {
+            controller.PositionUpdated -= OnPositionUpdated;
+        }
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) => 
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public void HandleVolumeChanged(double volume) => controller.Volume = volume;
-
     }
 }

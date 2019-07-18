@@ -7,7 +7,6 @@ namespace CMusicPlayer.CLI.Commands
     {
         public PlayPrevCommand(CommandLineTextInterface clti, IMediaPlayerController mp) : base(clti, mp)
         {
-           
         }
 
         public override string Help { get; } = "[Usage]: prev";
@@ -25,6 +24,7 @@ namespace CMusicPlayer.CLI.Commands
                 Clti.WriteError("There is no previous track in queue");
                 return;
             }
+
             Mp.SkipToPrev();
             Clti.WriteLine($"Playing previous track {Mp.CurrentTrack.Title}");
         }

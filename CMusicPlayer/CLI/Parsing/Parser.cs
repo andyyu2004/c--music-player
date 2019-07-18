@@ -8,15 +8,15 @@ namespace CMusicPlayer.CLI.Parsing
     internal class Parser
     {
         private readonly CommandLineTextInterface clti;
-        private List<Token> tokens = new List<Token>();
         private int i;
-
-        private bool AtEnd => i >= tokens.Count;
+        private List<Token> tokens = new List<Token>();
 
         public Parser(CommandLineTextInterface clti)
         {
             this.clti = clti;
         }
+
+        private bool AtEnd => i >= tokens.Count;
 
         public Cmd? Parse(List<Token> ts)
         {
@@ -39,7 +39,6 @@ namespace CMusicPlayer.CLI.Parsing
             var name = Expect(TokenType.Argument, $"Command name expected at {tokens[i]}");
             var cmd = new Cmd(name);
             while (!AtEnd)
-            {
                 switch (tokens[i].Type)
                 {
                     case TokenType.Flag:
@@ -52,7 +51,6 @@ namespace CMusicPlayer.CLI.Parsing
                         ParseArg(cmd);
                         break;
                 }
-            }
 
             return cmd;
         }
@@ -90,5 +88,4 @@ namespace CMusicPlayer.CLI.Parsing
             return tokens[i++];
         }
     }
-
 }

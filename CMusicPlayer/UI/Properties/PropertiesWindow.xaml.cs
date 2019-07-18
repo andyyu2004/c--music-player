@@ -4,12 +4,10 @@ using CMusicPlayer.UI.Utility;
 namespace CMusicPlayer.UI.Properties
 {
     /// <summary>
-    /// Interaction logic for PropertiesWindow.xaml
+    ///     Interaction logic for PropertiesWindow.xaml
     /// </summary>
     internal partial class PropertiesWindow
     {
-        public ITrack Track { get; }
-
         public PropertiesWindow(ITrack track)
         {
             InitializeComponent();
@@ -19,5 +17,7 @@ namespace CMusicPlayer.UI.Properties
 
             new ApplicationBarEventHandler(this, AppBar, Close);
         }
+
+        public ITrack Track { get; }
     }
 }

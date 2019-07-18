@@ -6,7 +6,6 @@ namespace CMusicPlayer.CLI.Interpreting
     {
         public InterpretationError(string message) : base(message)
         {
-            
         }
     }
 }

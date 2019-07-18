@@ -5,7 +5,9 @@ namespace CMusicPlayer.CLI.Commands
 {
     internal class PauseCommand : MediaCommand
     {
-        public PauseCommand(CommandLineTextInterface clti, IMediaPlayerController mp) : base(clti, mp) { }
+        public PauseCommand(CommandLineTextInterface clti, IMediaPlayerController mp) : base(clti, mp)
+        {
+        }
 
         public override string Help { get; } = "[Usage]: pause";
 
@@ -16,9 +18,9 @@ namespace CMusicPlayer.CLI.Commands
                 Clti.WriteLine("No track is currently playing");
                 return;
             }
+
             Mp.Pause();
             Clti.WriteLine("Paused");
         }
-
     }
 }

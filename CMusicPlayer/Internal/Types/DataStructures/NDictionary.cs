@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace CMusicPlayer.Internal.Types.DataStructures
 {
@@ -17,5 +16,4 @@ namespace CMusicPlayer.Internal.Types.DataStructures
             }
         }
     }
-
 }

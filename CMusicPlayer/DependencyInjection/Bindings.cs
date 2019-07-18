@@ -1,15 +1,11 @@
-﻿using ATL;
-using CMusicPlayer.CLI;
-using CMusicPlayer.Data.Databases;
+﻿using CMusicPlayer.Data.Databases;
 using CMusicPlayer.Data.Files;
 using CMusicPlayer.Data.Network;
 using CMusicPlayer.Data.Repositories;
 using CMusicPlayer.Media.Playback;
-using CMusicPlayer.UI.Login;
 using CMusicPlayer.UI.Music.CloudTracks;
 using CMusicPlayer.UI.Music.LocalTracks;
 using CMusicPlayer.UI.Music.ViewModelBases;
-using CMusicPlayer.UI.Properties;
 using CMusicPlayer.Util;
 using Ninject.Modules;
 
@@ -18,6 +14,7 @@ namespace CMusicPlayer.DependencyInjection
     public class Bindings : NinjectModule
     {
 //        https://github.com/ninject/ninject/wiki/Contextual-Binding
+
         public override void Load()
         {
             Bind<IMediaPlayerController>().To<MediaPlayerController>().InSingletonScope();

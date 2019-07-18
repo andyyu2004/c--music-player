@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CMusicPlayer.Internal.Types.EventArgs;
@@ -15,11 +14,19 @@ using CMusicPlayer.Util.Extensions;
 namespace CMusicPlayer.UI.Music.Shared
 {
     /// <summary>
-    /// Interaction logic for ArtistListControl.xaml
+    ///     Interaction logic for ArtistListControl.xaml
     /// </summary>
     internal partial class ArtistListControl : ISearchable, IRefreshable
     {
         private Func<Task<IEnumerable<IArtist>>> getArtists;
+
+        public ArtistListControl(TracksViewModel vm)
+        {
+            InitializeComponent();
+            DataContext = this;
+            getArtists = vm.GetArtists;
+        }
+
         public Func<Task<IEnumerable<IArtist>>> GetArtists
         {
             get => getArtists;
@@ -29,18 +36,20 @@ namespace CMusicPlayer.UI.Music.Shared
                 Refresh();
             }
         }
+
         public ObservableCollection<IArtist> ArtistList { get; } = new ObservableCollection<IArtist>();
 
-        public event EventHandler<ArtistEventArgs> ToAlbumsByArtist;
-
-        public ArtistListControl(TracksViewModel vm)
+        public async void Refresh()
         {
-            InitializeComponent();
-            DataContext = this;
-            getArtists = vm.GetArtists;
+            ArtistList.Refresh(await GetArtists());
         }
 
-        public async void Refresh() => ArtistList.Refresh(await GetArtists());
+        public bool FocusSearchElement()
+        {
+            return SearchControl.FocusInput();
+        }
+
+        public event EventHandler<ArtistEventArgs> ToAlbumsByArtist;
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -48,8 +57,9 @@ namespace CMusicPlayer.UI.Music.Shared
                 ToAlbumsByArtist?.Invoke(this, new ArtistEventArgs(artist));
         }
 
-        private void SearchTextChanged(object sender, TextChangedEventArgs e) => ArtistsGrid.ItemsSource = ArtistList.Where(t => t.Search(SearchControl.SearchBox.Text));
-
-        public bool FocusSearchElement() => SearchControl.FocusInput();
+        private void SearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            ArtistsGrid.ItemsSource = ArtistList.Where(t => t.Search(SearchControl.SearchBox.Text));
+        }
     }
 }

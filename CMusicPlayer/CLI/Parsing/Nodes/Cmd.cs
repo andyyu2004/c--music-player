@@ -6,6 +6,11 @@ namespace CMusicPlayer.CLI.Parsing.Nodes
 {
     internal class Cmd
     {
+        public Cmd(Token name)
+        {
+            Name = name;
+        }
+
         public Token Name { get; }
         public List<Token> Flags { get; } = new List<Token>();
 
@@ -16,13 +21,11 @@ namespace CMusicPlayer.CLI.Parsing.Nodes
 
         public List<Token> Args => Flags.Concat(FlagArgs.Keys).ToList();
 
-        public Cmd(Token name)
+        public override string ToString()
         {
-            Name = name;
+            return base.ToString();
         }
 
-        public override string ToString() => base.ToString();
 //            => $"{Name} {Flags.Repr()} {FlagArgs} {Arg}";
     }
-
 }

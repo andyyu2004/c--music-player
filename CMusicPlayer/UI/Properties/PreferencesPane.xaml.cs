@@ -3,7 +3,7 @@
 namespace CMusicPlayer.UI.Properties
 {
     /// <summary>
-    /// Interaction logic for PreferencesPane.xaml
+    ///     Interaction logic for PreferencesPane.xaml
     /// </summary>
     internal partial class PreferencesPane
     {

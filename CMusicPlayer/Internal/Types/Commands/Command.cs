@@ -7,13 +7,21 @@ namespace CMusicPlayer.Internal.Types.Commands
     {
         private readonly Action action;
 
-        public Command(Action action) => this.action = action;
+        public Command(Action action)
+        {
+            this.action = action;
+        }
 
-        public bool CanExecute(object parameter) => true;
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
 
-        public void Execute(object parameter) => action();
-
-        #pragma warning disable 0067
+        public void Execute(object parameter)
+        {
+            action();
+        }
+#pragma warning disable 0067
         public event EventHandler CanExecuteChanged;
     }
 }

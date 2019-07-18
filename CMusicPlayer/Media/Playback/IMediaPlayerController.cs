@@ -10,16 +10,22 @@ namespace CMusicPlayer.Media.Playback
 {
     internal interface IMediaPlayerController
     {
+        bool IsPlaying { get; }
+        List<ITrack> Tracks { get; }
+        double Volume { get; set; }
+
+        ObservableCollection<ITrack> Queue { get; }
+        int QueueIndex { get; }
+        ITrack? CurrentTrack { get; }
+        bool RepeatEnabled { get; set; }
+        bool ShuffleEnabled { get; set; }
+
         event EventHandler<PlayerUpdateEventArgs> PositionUpdated;
         event EventHandler<PlaybackStateChangedEventArgs> PlaybackStateChanged;
         event EventHandler<TrackEventArgs> CurrentTrackChanged;
         event EventHandler<StringEventArgs> LibraryChanged;
-
-        bool IsPlaying { get; }
-        List<ITrack> Tracks { get; }
         void SetTrackList(TracksViewModel sender, List<ITrack> xs);
         void SetTrack(ITrack track);
-        double Volume { get; set; }
         void TogglePlayPause();
         void Play();
         void Pause();
@@ -30,11 +36,6 @@ namespace CMusicPlayer.Media.Playback
         void SkipToNext();
         void SeekTo(double pos);
         void ShuffleAll();
-
-        ObservableCollection<ITrack> Queue { get; }
-        int QueueIndex { get; }
-        ITrack? CurrentTrack { get; }
         void JumpToIndex(int index);
-
     }
 }

@@ -12,7 +12,7 @@ namespace CMusicPlayer.CLI.Commands
     internal class QueryCommand : CliCommand
     {
         private readonly IDatabase db;
-        private readonly Token typeToken = new Token("&t", TokenType.ArgFlag);  
+        private readonly Token typeToken = new Token("&t", TokenType.ArgFlag);
 
         internal QueryCommand(CommandLineTextInterface clti, IDatabase db) : base(clti)
         {
@@ -21,7 +21,8 @@ namespace CMusicPlayer.CLI.Commands
             HasAnonymousArg = true;
         }
 
-        public override string Help { get; } = "[Usage]: query -t <type> <query> where <type> \u2208 {artist|r, album|l, track|t}";
+        public override string Help { get; } =
+            "[Usage]: query -t <type> <query> where <type> \u2208 {artist|r, album|l, track|t}";
 
         protected override void Run(Cmd cmd)
         {

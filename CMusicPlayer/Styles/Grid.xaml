@@ -4,18 +4,17 @@
     <Style TargetType="DataGrid">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="IsReadOnly" Value="True"/>
-        <Setter Property="GridLinesVisibility" Value="None"/>
-        <Setter Property="IsTextSearchEnabled" Value="True"/>
-        <Setter Property="FontSize" Value="11.5"/>
-        <Setter Property="Template" Value="{DynamicResource DataGridControlTemplate}"/>
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="GridLinesVisibility" Value="None" />
+        <Setter Property="IsTextSearchEnabled" Value="True" />
+        <Setter Property="FontSize" Value="11.5" />
+        <Setter Property="Template" Value="{DynamicResource DataGridControlTemplate}" />
     </Style>
 
 
-
     <Style x:Key="RowStyle" TargetType="{x:Type DataGridRow}">
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Background" Value="{StaticResource DefaultColor}"/>
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="{StaticResource DefaultColor}" />
     </Style>
 
 
@@ -26,7 +25,4 @@
     </Style>
 
 
-
-
-   
 </ResourceDictionary>

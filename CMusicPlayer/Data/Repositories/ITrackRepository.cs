@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CMusicPlayer.Media.Models;
 
@@ -13,5 +12,4 @@ namespace CMusicPlayer.Data.Repositories
         Task<IEnumerable<ITrack>> GetTracksByAlbum(IAlbum album);
         Task<IEnumerable<IAlbum>> GetAlbumsByArtist(IArtist artist);
     }
-
 }

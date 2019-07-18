@@ -10,44 +10,21 @@ using Dapper;
 namespace CMusicPlayer.Data.Databases
 {
     internal class Database : IDatabase
-    { 
+    {
         public Database() => InitializeDatabase();
 
-        private static void InitializeDatabase()
-        {
-            // Requires Explicit NOT NULL primary key?
-            const string command = @"create table if not exists Tracks (
-	            trackid bigint PRIMARY KEY NOT NULL,
-	            artist varchar(50), 
-	            album varchar(50),
-	            encoding varchar(10) NOT NULL,
-	            title varchar(256),
-	            filename varchar(256),
-                path varchar(256),
-	            samplerate mediumint unsigned,
-	            bitrate mediumint unsigned,
-	            bitdepth tinyint unsigned,
-	            duration smallint unsigned,
-	            length smallint unsigned,
-	            genre varchar(50),
-	            trackNumber tinyint unsigned,
-	            lyrics text,
-                year smallint unsigned,
-	            comments varchar(256)
-            )";
-            using var db = new SQLiteConnection(ConnectionString);
-            db.Execute(command);
-        }
+        private static string ConnectionString => "Data Source=musicdb.sqlite";
 
         public async Task SaveTrack(TrackModel track)
         {
-            using var db = new SQLiteConnection(ConnectionString);
+            await using var db = new SQLiteConnection(ConnectionString);
             try
             {
                 await db.ExecuteAsync(@"REPLACE Into Tracks
-                    (trackid, artist, album, title, encoding, filename, path, duration, bitrate, samplerate, lyrics, genre, year)
+                    (trackid, artist, album, title, encoding, filename, path, duration, bitrate, samplerate, lyrics, genre, year, tracknumber)
                     values 
-                    (@TrackId, @Artist, @Album, @Title, @Encoding, @Filename, @Path, @Duration, @Bitrate, @SampleRate, @Lyrics, @Genre, @Year)", track);
+                    (@TrackId, @Artist, @Album, @Title, @Encoding, @Filename, @Path, @Duration, @Bitrate, @SampleRate, @Lyrics, @Genre, @Year, @TrackNumber)",
+                    track);
             }
             catch (Exception e)
             {
@@ -76,13 +53,16 @@ namespace CMusicPlayer.Data.Databases
         public Task<IEnumerable<AlbumModel>> LoadAlbumsByArtist(IArtist artist)
         {
             using var db = new SQLiteConnection(ConnectionString);
-            return db.QueryAsync<AlbumModel>(@"SELECT DISTINCT artist, album, genre, year FROM Tracks WHERE artist = @Artist ORDER BY album", artist);
+            return db.QueryAsync<AlbumModel>(
+                @"SELECT DISTINCT artist, album, genre, year FROM Tracks WHERE artist = @Artist ORDER BY album",
+                artist);
         }
 
         public Task<IEnumerable<TrackModel>> LoadTracksByAlbum(IAlbum album)
         {
             using var db = new SQLiteConnection(ConnectionString);
-            return db.QueryAsync<TrackModel>(@"SELECT * FROM Tracks WHERE artist=@Artist AND album = @Album AND year = @Year", album);
+            return db.QueryAsync<TrackModel>(
+                @"SELECT * FROM Tracks WHERE artist=@Artist AND album = @Album AND year = @Year", album);
         }
 
         public async Task<Try<IEnumerable<TrackModel>>> TryLoadTracks()
@@ -112,6 +92,30 @@ namespace CMusicPlayer.Data.Databases
             }
         }
 
-        private static string ConnectionString => "Data Source=musicdb.sqlite";
+        private static void InitializeDatabase()
+        {
+            // Requires Explicit NOT NULL primary key?
+            const string command = @"create table if not exists Tracks (
+	            trackid bigint PRIMARY KEY NOT NULL,
+	            artist varchar(50), 
+	            album varchar(50),
+	            encoding varchar(10) NOT NULL,
+	            title varchar(256),
+	            filename varchar(256),
+                path varchar(256),
+	            samplerate mediumint unsigned,
+	            bitrate mediumint unsigned,
+	            bitdepth tinyint unsigned,
+	            duration smallint unsigned,
+	            length smallint unsigned,
+	            genre varchar(50),
+	            tracknumber tinyint unsigned,
+	            lyrics text,
+                year smallint unsigned,
+	            comments varchar(256)
+            )";
+            using var db = new SQLiteConnection(ConnectionString);
+            db.Execute(command);
+        }
     }
 }

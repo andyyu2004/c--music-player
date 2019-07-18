@@ -7,27 +7,12 @@ using CMusicPlayer.Internal.Types.EventArgs;
 namespace CMusicPlayer.CLI.Lines
 {
     /// <summary>
-    /// Interaction logic for Line.xaml
+    ///     Interaction logic for Line.xaml
     /// </summary>
     public partial class Line // : UserControl
     {
-        private readonly string prompt = string.Empty;
-
-        public event EventHandler<StringEventArgs> ReadLine;
-        public event EventHandler UpPressed;
-        public event EventHandler DownPressed;
-        public event EventHandler TabPressed;
-
         private readonly Dictionary<Key, Action> actionMap;
-        public string Text
-        {
-            get => Input.Text.Substring(prompt.Length);
-            set
-            {
-                Input.Text = $"{prompt}{value}";
-                Input.CaretIndex = Input.Text.Length;
-            }
-        }
+        private readonly string prompt = string.Empty;
 
         public Line()
         {
@@ -42,6 +27,21 @@ namespace CMusicPlayer.CLI.Lines
             this.prompt = prompt;
             Input.AppendText(prompt);
         }
+
+        public string Text
+        {
+            get => Input.Text.Substring(prompt.Length);
+            set
+            {
+                Input.Text = $"{prompt}{value}";
+                Input.CaretIndex = Input.Text.Length;
+            }
+        }
+
+        public event EventHandler<StringEventArgs> ReadLine;
+        public event EventHandler UpPressed;
+        public event EventHandler DownPressed;
+        public event EventHandler TabPressed;
 
         //        public void SetText(string text)
         //        {
@@ -61,7 +61,8 @@ namespace CMusicPlayer.CLI.Lines
         }
 
         private Dictionary<Key, Action> GenerateActionMap()
-            => new Dictionary<Key, Action>
+        {
+            return new Dictionary<Key, Action>
             {
                 {
                     Key.Return,
@@ -80,6 +81,7 @@ namespace CMusicPlayer.CLI.Lines
                     () => TabPressed?.Invoke(this, EventArgs.Empty)
                 }
             };
+        }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -92,5 +94,4 @@ namespace CMusicPlayer.CLI.Lines
             e.Handled = true;
         }
     }
-
 }

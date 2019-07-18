@@ -9,7 +9,7 @@ namespace CMusicPlayer.Util.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null) return "0:00";
-            var ts = TimeSpan.FromSeconds((int)value);
+            var ts = TimeSpan.FromSeconds((int) value);
             return $"{ts.Minutes}:{ts.Seconds:D2}";
         }
 

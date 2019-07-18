@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CMusicPlayer.Util.Extensions;
 
 namespace CMusicPlayer.CLI.Lexing
@@ -7,11 +6,14 @@ namespace CMusicPlayer.CLI.Lexing
     internal class Lexer
     {
         private readonly CommandLineTextInterface clti;
-        private string xs = "";
         private readonly List<Token> tokens = new List<Token>();
         private int i;
-        
-        public Lexer(CommandLineTextInterface clti) => this.clti = clti;
+        private string xs = "";
+
+        public Lexer(CommandLineTextInterface clti)
+        {
+            this.clti = clti;
+        }
 
         // Lex: string -> List<Token>
         public List<Token> Lex(string s)
@@ -57,12 +59,14 @@ namespace CMusicPlayer.CLI.Lexing
                                 t = TokenType.ArgFlag;
                                 break;
                         }
+
                         AdvanceUntil('\"');
                         if (i == xs.Length - 1 && xs[i] != '\"')
                             throw new LexError("Unterminated string, expected closing '\"'");
-                        AddToken(t, start + 1,  i - 1);
+                        AddToken(t, start + 1, i - 1);
                         break;
                     }
+
                     case '&':
                     {
                         if (i + 1 >= xs.Length || xs[i + 1] == ' ')
@@ -71,6 +75,7 @@ namespace CMusicPlayer.CLI.Lexing
                         AddToken(TokenType.ArgFlag, start, i);
                         break;
                     }
+
                     case '-':
                     {
                         if (i + 1 >= xs.Length || xs[i + 1] == ' ')
@@ -79,36 +84,32 @@ namespace CMusicPlayer.CLI.Lexing
                         AddToken(TokenType.Flag, start, i);
                         break;
                     }
+
                     default:
                     {
                         AdvanceUntil(' ');
                         AddToken(TokenType.Argument, start, i);
                         break;
                     }
-
                 }
+
                 i++;
             }
         }
 
         private void AdvanceUntil(char x)
         {
-            while (i + 1 < xs.Length && xs[++i] != x) { }
+            while (i + 1 < xs.Length && xs[++i] != x)
+            {
+            }
         }
 
         private void AddToken(TokenType type, int start, int end)
         {
 //            var substring = xs.Substring(start, xs.Length - end);
 //            var substring = xs[start..(end + 1)].Trim();
-            var substring = new string(xs.ToCharArray()[start..end + 1]).Trim();
+            var substring = new string(xs.ToCharArray()[start..(end + 1)]).Trim();
             tokens.Add(new Token(substring, type));
         }
-
-
-
-
-        
-
     }
 }
-

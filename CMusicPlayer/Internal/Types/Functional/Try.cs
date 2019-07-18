@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace CMusicPlayer.Internal.Types.Functional
 {
     /// <summary>
-    /// Try&lt;T&gt; is isomorphic to Either&lt;Exception, T&gt; 
+    ///     Try&lt;T&gt; is isomorphic to Either&lt;Exception, T&gt;
     /// </summary>
     /// <typeparam name="T"></typeparam>
     ///
+    ///
+    #nullable disable
     public class Try<T> // : Either<Exception, T> 
     {
-        #nullable disable
-        private readonly T val;
         private readonly Exception ex;
 
         public readonly bool IsError;
-        public bool IsSuccess => !IsError;
+        private readonly T val;
 
         public Try(Exception ex)
         {
@@ -29,6 +28,9 @@ namespace CMusicPlayer.Internal.Types.Functional
             this.val = val;
             IsError = false;
         }
+        #nullable enable
+
+        public bool IsSuccess => !IsError;
 
 //        public T Unwrap()
 //        {
@@ -37,9 +39,14 @@ namespace CMusicPlayer.Internal.Types.Functional
 //        }
 
         public TU Match<TU>(Func<Exception, TU> fl, Func<T, TU> fr)
-            => IsError ? fl(ex) : fr(val);
+        {
+            return IsError ? fl(ex) : fr(val);
+        }
 
-        public TU Fold<TU>(Func<Exception, TU> fl, Func<T, TU> fr) => Match(fl, fr);
+        public TU Fold<TU>(Func<Exception, TU> fl, Func<T, TU> fr)
+        {
+            return Match(fl, fr);
+        }
 
         public void Match(Action<Exception> fl, Action<T> fr)
         {
@@ -48,7 +55,9 @@ namespace CMusicPlayer.Internal.Types.Functional
         }
 
         public Try<TU> Bind<TU>(Func<T, Try<TU>> f)
-            => IsError ? new Try<TU>(ex) : f(val);
+        {
+            return IsError ? new Try<TU>(ex) : f(val);
+        }
 
         public void Bind(Action<T> f)
         {
@@ -56,11 +65,23 @@ namespace CMusicPlayer.Internal.Types.Functional
         }
 
         public Task<Try<TU>> BindAsync<TU>(Func<T, Task<Try<TU>>> f)
-            => IsError ? Task.FromResult(new Try<TU>(ex)) : f(val);
+        {
+            return IsError ? Task.FromResult(new Try<TU>(ex)) : f(val);
+        }
 
-        public static implicit operator Try<T>(T val) => new Try<T>(val);
-        public static implicit operator Try<T>(Exception ex) => new Try<T>(ex);
+        public static implicit operator Try<T>(T val)
+        {
+            return new Try<T>(val);
+        }
 
-        public static Try<T> Just(T val) => new Try<T>(val);
+        public static implicit operator Try<T>(Exception ex)
+        {
+            return new Try<T>(ex);
+        }
+
+        public static Try<T> Just(T val)
+        {
+            return new Try<T>(val);
+        }
     }
 }

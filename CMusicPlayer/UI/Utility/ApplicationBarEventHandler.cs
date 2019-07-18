@@ -6,8 +6,8 @@ namespace CMusicPlayer.UI.Utility
 {
     public class ApplicationBarEventHandler
     {
-        private readonly Window w;
         private readonly Action shutdownAction;
+        private readonly Window w;
 
         public ApplicationBarEventHandler(Window w, IApplicationBar bar, Action? shutdownAction = null)
         {
@@ -21,7 +21,9 @@ namespace CMusicPlayer.UI.Utility
         }
 
         public void OnCloseClicked(object sender, EventArgs e)
-            => shutdownAction.Invoke();
+        {
+            shutdownAction.Invoke();
+        }
 
         public void OnMaximizeClicked(object sender, EventArgs e)
         {
@@ -30,8 +32,14 @@ namespace CMusicPlayer.UI.Utility
                 : WindowState.Normal;
         }
 
-        public void OnMinimizeClicked(object sender, EventArgs e) => w.WindowState = WindowState.Minimized;
+        public void OnMinimizeClicked(object sender, EventArgs e)
+        {
+            w.WindowState = WindowState.Minimized;
+        }
 
-        public void OnAppBarMouseDown(object sender, EventArgs e) => w.DragMove();
+        public void OnAppBarMouseDown(object sender, EventArgs e)
+        {
+            w.DragMove();
+        }
     }
 }

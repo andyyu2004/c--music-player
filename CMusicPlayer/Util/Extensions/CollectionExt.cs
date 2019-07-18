@@ -11,13 +11,14 @@ namespace CMusicPlayer.Util.Extensions
             ys.ForEach(xs.Add);
         }
 
-        internal static void AddCopy<T>(this ICollection<T> xs, T x) where T : IShallowCopyable =>
-            xs.Add((T)x.ShallowCopy());
+        internal static void AddCopy<T>(this ICollection<T> xs, T x) where T : IShallowCopyable
+        {
+            xs.Add((T) x.ShallowCopy());
+        }
+
 //        {
 //            if (xs.Contains(x)) xs.Add((T) x.ShallowCopy());
 //            else xs.Add(x);
 //        }
-
-
     }
 }

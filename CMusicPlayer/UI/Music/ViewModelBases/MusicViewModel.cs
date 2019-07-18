@@ -9,11 +9,17 @@ namespace CMusicPlayer.UI.Music.ViewModelBases
      */
     internal abstract class MusicViewModel
     {
+        protected MusicViewModel(IMediaPlayerController mp)
+        {
+            Mp = mp;
+        }
+
         protected IMediaPlayerController Mp { get; }
 
-        protected MusicViewModel(IMediaPlayerController mp) => Mp = mp;
-
-        public void SetTrack(ITrack track) => Mp.SetTrack(track);
+        public void SetTrack(ITrack track)
+        {
+            Mp.SetTrack(track);
+        }
 
         public void ViewProperties(ITrack track)
         {

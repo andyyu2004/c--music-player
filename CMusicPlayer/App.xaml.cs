@@ -9,18 +9,21 @@ using Ninject;
 
 /**
  * TODO
+ * Allow opening files in this
  * Allow deletion and clear database
  * Reduce memory consumption somehow
  * Implement queue to album and artist
  * Implement play album functionality in album view
  * Order album view by track number
+ * RepeatEnabled
+ * Add the settings constants to the Settings class not Constants (makes much more sense)
  */
 namespace CMusicPlayer
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    ///     Interaction logic for App.xaml
     /// </summary>
-    public partial class App 
+    public partial class App
     {
         private readonly StandardKernel kernel = new StandardKernel(new Bindings());
 
@@ -52,7 +55,5 @@ namespace CMusicPlayer
             Config.Save();
             Current.Shutdown(0);
         }
-
-
     }
 }

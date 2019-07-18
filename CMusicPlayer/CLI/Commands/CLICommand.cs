@@ -7,6 +7,11 @@ namespace CMusicPlayer.CLI.Commands
 {
     internal abstract class CliCommand
     {
+        protected CliCommand(CommandLineTextInterface clti)
+        {
+            Clti = clti;
+        }
+
         protected CommandLineTextInterface Clti { get; }
         public abstract string Help { get; }
         public HashSet<Token> Required { get; } = new HashSet<Token>();
@@ -16,11 +21,6 @@ namespace CMusicPlayer.CLI.Commands
         public IEnumerable<Token> Args => Required.Concat(Optional);
 
         public bool HasAnonymousArg { get; protected set; } = false;
-
-        protected CliCommand(CommandLineTextInterface clti)
-        {
-            Clti = clti;
-        }
 
         protected abstract void Run(Cmd cmd);
 
@@ -37,14 +37,16 @@ namespace CMusicPlayer.CLI.Commands
         {
             if (HasAnonymousArg && cmd.Arg == null)
                 throw new ArgumentError("Anonymous(unnamed) argument expected");
-            if (!HasAnonymousArg && cmd.Arg != null) 
+            if (!HasAnonymousArg && cmd.Arg != null)
                 throw new ArgumentError($"Unexpected anonymous(unnamed) argument '{cmd.Arg.Value.Lexeme}'");
 
             foreach (var x in Required)
-                if (!cmd.Args.Contains(x)) throw new ArgumentError($"Argument '{x.Lexeme}' expected");
+                if (!cmd.Args.Contains(x))
+                    throw new ArgumentError($"Argument '{x.Lexeme}' expected");
 
             foreach (var x in cmd.Args)
-                if (!Args.Contains(x)) throw new ArgumentError($"Unexpected argument '{x.Lexeme}'");
+                if (!Args.Contains(x))
+                    throw new ArgumentError($"Unexpected argument '{x.Lexeme}'");
         }
     }
 }

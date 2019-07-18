@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
-using ATL;
+﻿using System;
+using System.Diagnostics;
+using System.Security.Cryptography;
 using CMusicPlayer.Internal.Interfaces;
+using TagLib;
 
 namespace CMusicPlayer.Media.Models
 {
@@ -9,7 +11,7 @@ namespace CMusicPlayer.Media.Models
         public string? Artist { get; set; }
         public long? ArtistId { get; set; }
         public string? Album { get; set; }
-        public long? AlbumId { get; set; } 
+        public long? AlbumId { get; set; }
         public string? Title { get; set; }
         public string? Genre { get; set; }
         public long? TrackId { get; set; }
@@ -24,12 +26,17 @@ namespace CMusicPlayer.Media.Models
         public string? Lyrics { get; set; }
         public uint? Year { get; set; }
 
+        public IShallowCopyable ShallowCopy()
+        {
+            return (IShallowCopyable) MemberwiseClone();
+        }
+
         /// <summary>
-        /// Create Track Object From TagLib.File
+        ///     Create Track Object From TagLib.File
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public static TrackModel FromFile(TagLib.File file)
+        public static TrackModel FromFile(File file)
         {
             // Using both libraries to get tags as some fields only work for one of the libraries
             var t = file.Tag;
@@ -41,10 +48,10 @@ namespace CMusicPlayer.Media.Models
                 Album = t.Album,
                 Title = t.Title,
                 Genre = t.FirstGenre,
-                TrackId = file.Name.GetHashCode(),
+                TrackId = HashTrack(file.Name, p.AudioBitrate, p.Duration),
                 Path = file.Name,
                 Encoding = System.IO.Path.GetExtension(file.Name),
-                Filename = file.Name, 
+                Filename = file.Name,
                 SampleRate = p.AudioSampleRate,
                 BitRate = p.AudioBitrate,
                 Duration = (int) p.Duration.TotalSeconds,
@@ -55,10 +62,14 @@ namespace CMusicPlayer.Media.Models
             };
         }
 
-        public override string ToString() =>
-            $"{Artist} -> {Album} -> {Title}";
+        private static long HashTrack(string path, int bitrate, TimeSpan duration)
+        {
+            using var hash = SHA256.Create();
+            var bytes = hash.ComputeHash(System.Text.Encoding.UTF8.GetBytes($"{path}:{bitrate}:{duration.TotalMilliseconds}"));
+            return BitConverter.ToInt64(bytes);
+        }
 
-        public IShallowCopyable ShallowCopy() => (IShallowCopyable) MemberwiseClone();
+        public override string ToString() => $"{Artist} -> {Album} -> {Title}";
 
         // ATL api
 //        public static TrackModel FromFile(string filename)
@@ -93,7 +104,5 @@ namespace CMusicPlayer.Media.Models
 //                Year = (uint?) t.Year,
 //            };
 //        }
-
-
     }
 }

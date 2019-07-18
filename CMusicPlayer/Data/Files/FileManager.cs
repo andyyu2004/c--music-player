@@ -7,22 +7,26 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CMusicPlayer.Data.Databases;
 using CMusicPlayer.Media.Models;
+using File = TagLib.File;
 
 namespace CMusicPlayer.Data.Files
 {
     internal class FileManager
     {
-        private readonly IDatabase db;
-
         private static readonly string[] SupportedFormats =
         {
             "aa", "aax", "aac", "aiff", "ape", "dsf", "flac", "m4a", "m4b", "m4p", "mp3", "mpc", "mpp", "ogg", "oga",
             "wav", "wma", "wv", "webm"
         };
 
-        public event EventHandler FilesUploaded;
+        private readonly IDatabase db;
 
-        public FileManager(IDatabase db) => this.db = db;
+        public FileManager(IDatabase db)
+        {
+            this.db = db;
+        }
+
+        public event EventHandler FilesUploaded;
 
         public async Task AddLocalFiles(Action<string>? setNotificationMessage = null)
         {
@@ -56,7 +60,7 @@ namespace CMusicPlayer.Data.Files
                     try
                     {
                         // Taglib api
-                        await db.SaveTrack(TrackModel.FromFile(TagLib.File.Create(file)));
+                        await db.SaveTrack(TrackModel.FromFile(File.Create(file)));
                         // ATL api
 //                        await db.SaveTrack(Track.FromFile(file));
                     }
@@ -64,20 +68,18 @@ namespace CMusicPlayer.Data.Files
                     {
                         Debug.WriteLine(e.Message);
                     }
-
                 }));
             });
         }
 
         /// <summary>
-        /// Opens Files Dialog And Returns Array Of File Paths
+        ///     Opens Files Dialog And Returns Array Of File Paths
         /// </summary>
         private static IEnumerable<string> OpenFileDialog()
         {
-            var fileDialog = new OpenFileDialog { Multiselect = true };
+            var fileDialog = new OpenFileDialog {Multiselect = true};
             fileDialog.ShowDialog();
             return fileDialog.FileNames;
         }
-
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 
 namespace CMusicPlayer.Util.Extensions
 {
@@ -14,7 +13,5 @@ namespace CMusicPlayer.Util.Extensions
             var randInt = gen.Next(xs.Count - 1);
             return xs.ElementAt(randInt);
         }
-
-
     }
 }

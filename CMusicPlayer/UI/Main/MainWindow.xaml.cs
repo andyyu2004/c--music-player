@@ -1,43 +1,69 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using CMusicPlayer.Configuration;
+using CMusicPlayer.Internal.Types.EventArgs;
+using CMusicPlayer.Media.Models;
 using CMusicPlayer.UI.Music.CloudTracks;
 using CMusicPlayer.UI.Music.LocalTracks;
 using CMusicPlayer.UI.Music.Queue;
+using CMusicPlayer.UI.Music.Shared;
 using CMusicPlayer.UI.Utility;
 using CMusicPlayer.Util;
-using CMusicPlayer.Util.Dummies;
 
 namespace CMusicPlayer.UI.Main
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    internal partial class MainWindow 
+    internal partial class MainWindow
     {
-        private readonly LocalTracksView localTracksView;
         private readonly CloudTracksView cloudTracksView;
+        private readonly LocalTracksView localTracksView;
         private readonly QueueView queueView;
         private readonly MainViewModel vm;
         private bool mouseDownOnSlider;
+        private readonly Dictionary<string, TracksView> viewMap;
 
-        public MainWindow(LocalTracksView localTracksView, CloudTracksView cloudTracksView, QueueView queueView, MainViewModel vm)
+
+        public MainWindow(LocalTracksView localTracksView, CloudTracksView cloudTracksView, QueueView queueView,
+            MainViewModel vm)
         {
             InitializeComponent();
             this.localTracksView = localTracksView;
             this.cloudTracksView = cloudTracksView;
             this.queueView = queueView;
+            queueView.ToArtist += QueueViewOnToArtist;
+            queueView.ToAlbum += QueueViewOnToAlbum;
             this.vm = vm;
 
+            viewMap = new Dictionary<string, TracksView>()
+            {
+                {Constants.Local, localTracksView },
+                {Constants.Cloud, cloudTracksView }
+            };
+            
             DataContext = vm;
 
             new ApplicationBarEventHandler(this, AppBar, Application.Current.Shutdown);
 
             MainFrame.Content = localTracksView;
+        }
 
+        private void QueueViewOnToAlbum(object sender, AlbumEventArgs e)
+        {
+            var view = viewMap[vm.CurrentLibrary];
+            view.ToTracksByAlbum(e.Album);
+            MainFrame.Content = view;
+        }
+
+        private void QueueViewOnToArtist(object sender, ArtistEventArgs e)
+        {
+            var view = viewMap[vm.CurrentLibrary];
+            view.ToAlbumsByArtist(e.Artist);
+            MainFrame.Content = view;
         }
 
         private void OnLocalTracksClicked(object sender, RoutedEventArgs e)
@@ -52,8 +78,7 @@ namespace CMusicPlayer.UI.Main
             MainFrame.Content = cloudTracksView;
         }
 
-        private void OnQueueClicked(object sender, RoutedEventArgs e)
-            => MainFrame.Content = queueView;
+        private void OnQueueClicked(object sender, RoutedEventArgs e) => MainFrame.Content = queueView;
 
         private void OnSliderMouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -81,7 +106,7 @@ namespace CMusicPlayer.UI.Main
 
         private void HandleLogout(object sender, RoutedEventArgs e)
         {
-            Config.Default(Constants.Authentication);
+            Config.Default(Config.Authentication);
             Config.Save();
             Process.Start(@"./Scripts/start.bat");
             Application.Current.Shutdown(0);
@@ -96,10 +121,8 @@ namespace CMusicPlayer.UI.Main
         {
             var norm = e.NewValue / VolumeSlider.Maximum;
             vm?.HandleVolumeChanged(norm);
-            VolumeLabel?.SetValue(ContentProperty, $"{(int)(norm * 100)}");
+            VolumeLabel?.SetValue(ContentProperty, $"{(int) (norm * 100)}");
         }
 
-
     }
-
 }

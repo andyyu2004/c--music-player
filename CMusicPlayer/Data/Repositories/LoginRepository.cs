@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using ByteTerrace.Maths.Cryptography;
+using CMusicPlayer.Configuration;
 using CMusicPlayer.Data.Databases;
 using CMusicPlayer.Data.Network;
 using CMusicPlayer.Data.Network.ResponseTypes;
+using CMusicPlayer.Data.Network.Types;
 using CMusicPlayer.Internal.Types.Functional;
 using Newtonsoft.Json;
-using System.Security.Cryptography;
-using ByteTerrace.Maths.Cryptography;
-using CMusicPlayer.Configuration;
-using CMusicPlayer.Data.Network.Types;
-using CMusicPlayer.Util;
-using static CMusicPlayer.Util.Constants;
 
 namespace CMusicPlayer.Data.Repositories
 {
     internal class LoginRepository
     {
-        private readonly NetworkDataSource networkDataSource;
         private readonly Database database;
+        private readonly NetworkDataSource networkDataSource;
 
         public LoginRepository(NetworkDataSource networkDataSource, Database database)
         {
@@ -28,7 +26,7 @@ namespace CMusicPlayer.Data.Repositories
         }
 
         /// <summary>
-        /// Generates User object with the hashed password
+        ///     Generates User object with the hashed password
         /// </summary>
         /// <param name="email"></param>
         /// <param name="password"></param>
@@ -52,7 +50,7 @@ namespace CMusicPlayer.Data.Repositories
         }
 
         /// <summary>
-        /// Executes Login Procedure
+        ///     Executes Login Procedure
         /// </summary>
         /// <param name="email"></param>
         /// <param name="password"></param>
@@ -68,7 +66,7 @@ namespace CMusicPlayer.Data.Repositories
         }
 
         /// <summary>
-        /// Parses Login Response And Saves Data Locally    
+        ///     Parses Login Response And Saves Data Locally
         /// </summary>
         /// <param name="res"></param>
         /// <returns></returns>
@@ -76,10 +74,10 @@ namespace CMusicPlayer.Data.Repositories
         {
             Debug.WriteLine(res);
             var loginResObj = JsonConvert.DeserializeObject<LoginResponse>(res);
-            var auth = Config.Settings[Authentication];
-            auth[JwtToken] = loginResObj.Token;
-            auth[UserName] = loginResObj.User;
-            auth[UserId] = loginResObj.UserId;
+            var auth = Config.Settings[Config.Authentication];
+            auth[Config.JwtToken] = loginResObj.Token;
+            auth[Config.UserName] = loginResObj.User;
+            auth[Config.UserId] = loginResObj.UserId;
             Config.Save();
             return loginResObj.Message;
         }

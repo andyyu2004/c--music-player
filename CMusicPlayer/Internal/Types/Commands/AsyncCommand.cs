@@ -8,19 +8,21 @@ namespace CMusicPlayer.Internal.Types.Commands
     {
         public Func<Task> ExecuteDelegate;
 
-        public bool CanExecute(object parameter) => true;
-
         public AsyncCommand(Func<Task> executeDelegate)
         {
             ExecuteDelegate = executeDelegate;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
         }
 
         public void Execute(object? parameter = null)
         {
             ExecuteDelegate?.Invoke();
         }
-
-        #pragma warning disable 0067
+#pragma warning disable 0067
         public event EventHandler CanExecuteChanged;
     }
 }

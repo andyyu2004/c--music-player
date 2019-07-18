@@ -5,8 +5,11 @@ namespace CMusicPlayer.CLI.Commands
 {
     internal class PlayCommand : MediaCommand
     {
+        public PlayCommand(CommandLineTextInterface clti, IMediaPlayerController mp) : base(clti, mp)
+        {
+        }
 
-        public PlayCommand(CommandLineTextInterface clti, IMediaPlayerController mp) : base(clti, mp) {}
+        public override string Help { get; } = "[Usage]: play";
 
 
         protected override void Run(Cmd cmd)
@@ -16,11 +19,9 @@ namespace CMusicPlayer.CLI.Commands
                 Clti.WriteLine("No track is currently playing");
                 return;
             }
+
             Clti.WriteLine($"Playing '{Mp.CurrentTrack.Title}'");
             Mp.Play();
-        } 
-
-        public override string Help { get; } = "[Usage]: play";
-
+        }
     }
 }

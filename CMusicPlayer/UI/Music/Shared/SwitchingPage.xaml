@@ -1,32 +1,32 @@
 ﻿<Page x:Class="CMusicPlayer.UI.Music.Shared.SwitchingPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:CMusicPlayer.UI.Music.Shared"
       xmlns:general="clr-namespace:CMusicPlayer.UI.General"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SwitchingPage" x:ClassModifier="internal">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition/>
+            <RowDefinition Height="25" />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
-        <general:SelectionControl 
-            Grid.Row="0" 
+        <general:SelectionControl
+            Grid.Row="0"
             HorizontalAlignment="Left"
             ToArtists="OnToArtists"
             ToAlbums="OnToAlbums"
             ToGenres="OnToGenres"
-            ToTracks="OnToTracks"/>
+            ToTracks="OnToTracks" />
 
-        <Button Grid.Row="0" 
-                HorizontalAlignment="Right" 
-                Content="Back" 
-                Click="OnBack"/>
+        <Button Grid.Row="0"
+                HorizontalAlignment="Right"
+                Content="Back"
+                Click="OnBack" />
 
         <Frame Name="ViewFrame" Grid.Row="1" />
     </Grid>

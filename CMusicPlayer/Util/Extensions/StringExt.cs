@@ -5,12 +5,17 @@ namespace CMusicPlayer.Util.Extensions
 {
     public static class StringExt
     {
-        public static bool IsEmpty(this string s) => string.IsNullOrWhiteSpace(s);
+        public static bool IsEmpty(this string s)
+        {
+            return string.IsNullOrWhiteSpace(s);
+        }
 
-        public static bool IsValidUri(this string s) => 
-            Uri.TryCreate(s, UriKind.Absolute, out _)
-            && (s.StartsWith("http://")
-            || s.StartsWith("https://"));
+        public static bool IsValidUri(this string s)
+        {
+            return Uri.TryCreate(s, UriKind.Absolute, out _)
+                   && (s.StartsWith("http://")
+                       || s.StartsWith("https://"));
+        }
 
         public static Try<Uri> ToUri(this string str)
         {

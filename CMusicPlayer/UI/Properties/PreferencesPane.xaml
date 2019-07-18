@@ -11,13 +11,13 @@
         Title="PreferencesPane" Height="450" Width="800" x:ClassModifier="internal">
     <Grid Background="#CC111111">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="601*"/>
-            <ColumnDefinition Width="199*"/>
+            <ColumnDefinition Width="601*" />
+            <ColumnDefinition Width="199*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition/>
+            <RowDefinition Height="25" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <applicationBar:ApplicationBar Grid.Row="0" BarTitle="Preferences" x:Name="WindowBar" Grid.ColumnSpan="2"/>
+        <applicationBar:ApplicationBar Grid.Row="0" BarTitle="Preferences" x:Name="WindowBar" Grid.ColumnSpan="2" />
     </Grid>
 </Window>

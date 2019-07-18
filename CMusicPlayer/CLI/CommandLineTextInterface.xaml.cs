@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -10,33 +9,34 @@ using CMusicPlayer.Internal.Types.EventArgs;
 namespace CMusicPlayer.CLI
 {
     /// <summary>
-    /// Interaction logic for CommandLineTextInterface.xaml
+    ///     Interaction logic for CommandLineTextInterface.xaml
     /// </summary>
     public partial class CommandLineTextInterface
     {
-        public string Prompt { get; set; } = ">>=: ";
-
         public static readonly DependencyProperty CommandListProperty =
-            DependencyProperty.Register(nameof(CommandList), typeof(IEnumerable<string>), typeof(CommandLineTextInterface));
-
-        public IEnumerable<string> CommandList
-        {
-            get => (IEnumerable<string>)GetValue(CommandListProperty);
-            set => SetValue(CommandListProperty, value);
-        }
-
-        public event EventHandler<StringEventArgs> ReadLine;
+            DependencyProperty.Register(nameof(CommandList), typeof(IEnumerable<string>),
+                typeof(CommandLineTextInterface));
 
         private readonly List<string> history = new List<string>(); // Stack doesn't work as may need to go down again
-        private int historyIndex;
 
         private Line currLine = new Line();
+        private int historyIndex;
 
         public CommandLineTextInterface()
         {
             InitializeComponent();
             PutNewLine();
         }
+
+        public string Prompt { get; set; } = ">>=: ";
+
+        public IEnumerable<string> CommandList
+        {
+            get => (IEnumerable<string>) GetValue(CommandListProperty);
+            set => SetValue(CommandListProperty, value);
+        }
+
+        public event EventHandler<StringEventArgs> ReadLine;
 
         public void PutNewLine(string text = "")
         {
@@ -57,7 +57,7 @@ namespace CMusicPlayer.CLI
         {
             // Remove Listeners
             if (StackPanel.Children.Count <= 1) return;
-            var prevLine = (Line)StackPanel.Children[StackPanel.Children.Count - 2];
+            var prevLine = (Line) StackPanel.Children[StackPanel.Children.Count - 2];
             prevLine.ReadLine -= OnReadLine;
             prevLine.UpPressed -= OnUpPressed;
             prevLine.DownPressed -= OnDownPressed;
@@ -105,14 +105,12 @@ namespace CMusicPlayer.CLI
             if (history.Count == 0 || e.Str != history.Last())
                 history.Add(e.Str);
             PutNewLine();
-
         }
 
 
         private void StackPanel_OnMouseUp(object sender, MouseButtonEventArgs e)
-            => currLine?.Input.Focus();
-
-
+        {
+            currLine?.Input.Focus();
+        }
     }
-
 }

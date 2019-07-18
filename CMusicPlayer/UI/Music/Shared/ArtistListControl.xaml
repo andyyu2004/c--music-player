@@ -1,18 +1,18 @@
 ﻿<UserControl x:Class="CMusicPlayer.UI.Music.Shared.ArtistListControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:CMusicPlayer.UI.Music.Shared"
              xmlns:general="clr-namespace:CMusicPlayer.UI.General"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" x:ClassModifier="internal">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-        <DataGrid 
+        <DataGrid
             Grid.Row="0"
             MouseDoubleClick="OnDoubleClick"
             Name="ArtistsGrid"
@@ -30,11 +30,11 @@
                     Width="400" />
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel 
+        <StackPanel
             Orientation="Horizontal"
             Grid.Row="1">
-            <general:SearchControl x:Name="SearchControl" TextChanged="SearchTextChanged"/>
-            <Label Content="{Binding ArtistList.Count}" ContentStringFormat="Number of Artists: {0}" Foreground="White"/>
+            <general:SearchControl x:Name="SearchControl" TextChanged="SearchTextChanged" />
+            <Label Content="{Binding ArtistList.Count}" ContentStringFormat="Number of Artists: {0}" Foreground="White" />
         </StackPanel>
     </Grid>
 </UserControl>
